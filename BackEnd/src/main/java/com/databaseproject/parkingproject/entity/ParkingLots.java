@@ -5,10 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 public class ParkingLots {
     private Integer id;
     private Integer disabledCount;
     private Integer regularCount;
+    private boolean isHighDemandArea;
     private Integer EVCount;
     private String location;
 
