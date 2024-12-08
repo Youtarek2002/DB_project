@@ -5,29 +5,79 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-@Table(name = "parking_spots")
+
 public class ParkingSpots {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Integer id;
-    @Column(name = "status")
     private Status status;
-    @Column(name = "type")
     private String type;
-    @Column(name = "price")
     private Integer price;
-    @ManyToOne
-    @JoinColumn(name = "parking_lot_id", referencedColumnName = "id")
-    private ParkingLots parkingLot;
+    private Integer parkingLotId;
 
     public enum Status {
         OCCUPIED,
         AVAILABLE,
         RESERVED
+    }
+
+    public ParkingSpots(Integer id, Status status, String type, Integer price, Integer parkingLotId) {
+        this.id = id;
+        this.status = status;
+        this.type = type;
+        this.price = price;
+        this.parkingLotId = parkingLotId;
+    }
+
+    public ParkingSpots() {
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public Integer getParkingLotId() {
+        return parkingLotId;
+    }
+
+    public void setParkingLotId(Integer parkingLotId) {
+        this.parkingLotId = parkingLotId;
+    }
+
+    @Override
+    public String toString() {
+        return "ParkingSpots{" +
+                "id=" + id +
+                ", status=" + status +
+                ", type='" + type + '\'' +
+                ", price=" + price +
+                ", parkingLotId=" + parkingLotId +
+                '}';
     }
 }

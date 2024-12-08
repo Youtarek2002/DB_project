@@ -11,37 +11,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "users")
 @SuperBuilder
 public class Users implements UserDetails{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+
     private Integer id;
-    @Column(name = "fname")
     private String fname;
-    @Column(name = "lname")
     private String lname;
-    @Column(name = "username" , unique = true , nullable = false)
     private String username;
-    @Column(name = "email", unique = true , nullable = false)
     private String email;
-    @Column(name = "phone")
     private String phone;
-    @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "payment_method")
     private String paymentMethod;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
     private Role role;
-
-    @Column(name = "license_plate")
     private String licensePlate;
 
     @Override
@@ -73,5 +54,119 @@ public class Users implements UserDetails{
         DRIVER,
         PARKING_LOT_MANAGER,
         SYSTEM_ADMIN
+    }
+
+    public Users(Integer id, String fname, String lname, String username, String email, String phone, String password, String paymentMethod, Role role, String licensePlate) {
+        this.id = id;
+        this.fname = fname;
+        this.lname = lname;
+        this.username = username;
+        this.email = email;
+        this.phone = phone;
+        this.password = password;
+        this.paymentMethod = paymentMethod;
+        this.role = role;
+        this.licensePlate = licensePlate;
+    }
+
+    public Users() {
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getFname() {
+        return fname;
+    }
+
+    public void setFname(String fname) {
+        this.fname = fname;
+    }
+
+    public String getLname() {
+        return lname;
+    }
+
+    public void setLname(String lname) {
+        this.lname = lname;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
+    }
+
+    @Override
+    public String toString() {
+        return "Users{" +
+                "id=" + id +
+                ", fname='" + fname + '\'' +
+                ", lname='" + lname + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", password='" + password + '\'' +
+                ", paymentMethod='" + paymentMethod + '\'' +
+                ", role=" + role +
+                ", licensePlate='" + licensePlate + '\'' +
+                '}';
     }
 }
