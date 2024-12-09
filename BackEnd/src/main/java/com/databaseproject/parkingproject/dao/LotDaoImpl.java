@@ -4,8 +4,11 @@ import com.databaseproject.parkingproject.dto.ResponseMessageDto;
 import com.databaseproject.parkingproject.entity.ParkingLots;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 @Repository
@@ -35,6 +38,7 @@ public class LotDaoImpl {
 
 
     private static final String SQL_GET_PENDING_LOTS = "SELECT * FROM parking_lots WHERE admitted = false";
+    private static final String SQL_GET_MANAGER_LOTS = "SELECT * FROM parking_lots WHERE parking_lot_manager = ?";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -120,5 +124,22 @@ public class LotDaoImpl {
     }
 
 
+    public List<ParkingLots> getManagerLots(int managerId) {
+        return  jdbcTemplate.query(SQL_GET_MANAGER_LOTS,new Object[]{managerId}, new ParkingLotsRowMapper());
+    }
+    public class ParkingLotsRowMapper implements RowMapper<ParkingLots> {
+        @Override
+        public ParkingLots mapRow(ResultSet rs, int rowNum) throws SQLException {
+            ParkingLots parkingLot = new ParkingLots();
+            parkingLot.setId(rs.getInt("id"));
+            parkingLot.setDisabledCount(rs.getInt("disabled_count"));
+            parkingLot.setRegularCount(rs.getInt("regular_count"));
+            parkingLot.setEVCount(rs.getObject("ev_count", Integer.class)); // Handles nulls correctly
+            parkingLot.setLocation(rs.getString("location"));
+            parkingLot.setManagerId(rs.getInt("parking_lot_manager"));
+            parkingLot.setAdmitted(rs.getBoolean("admitted"));
+            return parkingLot;
+        }
+    }
 
 }

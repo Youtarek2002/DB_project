@@ -34,5 +34,10 @@ public class LotsController {
         List<ParkingLots> lotList = lotDao.getAllPendingLots();
         return lotList.toArray(new ParkingLots[0]);
     }
+    @GetMapping("/manager/lots")
+    public ParkingLots[] getManagerLots(@RequestParam int managerId) {
+        List<ParkingLots> lotList = lotDao.getManagerLots(managerId);
+        return lotList.toArray(new ParkingLots[0]);
+    }
 
 }
