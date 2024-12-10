@@ -30,6 +30,7 @@ public class ParkingLots {
     @JsonProperty("admitted")
     private Boolean admitted;
 
+
     // Default constructor
     public ParkingLots() {
         this.admitted = false; // Set default value for admitted
@@ -44,18 +45,19 @@ public class ParkingLots {
         this.location = location;
         this.managerId = managerId;
         this.admitted = false;  // default value for 'admitted'
+
     }
 
     @Override
     public String toString() {
         return "ParkingLots{" +
-                "admitted=" + admitted +
-                ", id=" + id +
+                "id=" + id +
                 ", disabledCount=" + disabledCount +
                 ", regularCount=" + regularCount +
                 ", EVCount=" + EVCount +
                 ", location='" + location + '\'' +
                 ", managerId=" + managerId +
+                ", admitted=" + admitted +
                 '}';
     }
 }

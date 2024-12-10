@@ -14,7 +14,7 @@ public class DynamicPriceService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Integer calculatePrice(ParkingSpots parkingSpots){
+    public Integer calculatePrice(int id){
         int price=5; //default price
         final LocalTime peakStart = LocalTime.of(14, 0);
         final LocalTime peakEnd = LocalTime.of(19, 0);
@@ -23,14 +23,9 @@ public class DynamicPriceService {
             price +=10;
         }
         String countQuery="select count(*) from parking_spots where parking_lot_id=? and status='AVAILABLE'";
-        int numberOfNonOccupiedSpots=jdbcTemplate.queryForObject(countQuery, Integer.class,parkingSpots.getParkingLotId());
+        int numberOfNonOccupiedSpots=jdbcTemplate.queryForObject(countQuery, Integer.class,id);
         if(numberOfNonOccupiedSpots<5){
             price+=7;
-        }
-        String selectQuery="select is_high_demand_area from parking_lots where id=?";
-        boolean isHighDemandArea=jdbcTemplate.queryForObject(selectQuery, Boolean.class,parkingSpots.getParkingLotId());
-        if(isHighDemandArea){
-            price+=10;
         }
 
         return price;

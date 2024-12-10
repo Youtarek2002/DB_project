@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS parking_lots (
     regular_count INT NOT NULL DEFAULT 0,
     EV_count INT NOT NULL DEFAULT 0,
     location VARCHAR(500) NOT NULL,
-    parking_lot_manager INT,
+    parking_lot_manager INT ,
     admitted BOOLEAN,
     FOREIGN KEY (parking_lot_manager) REFERENCES users(id)
 );
@@ -47,7 +47,7 @@ foreign key (parking_lot_id) references parking_lots(id) on delete cascade
  );
  create table IF NOT EXISTS time_slots(
  id int auto_increment primary key not null,
- status	enum('OCCUPIED','AVAILABLE','RESERVED') not null DEFAULT "AVAILABLE",
+ status	enum('OCCUPIED','AVAILABLE','RESERVED') not null DEFAULT 'AVAILABLE',
  parking_spot_id int,
  start_time	time,
  foreign key (parking_spot_id) references parking_spots(id) on delete cascade
