@@ -6,7 +6,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Time;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
+
+@Getter
+@Setter
+
+@SuperBuilder
 public class Transactions {
     private Integer id;
     private Integer amount;

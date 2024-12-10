@@ -1,79 +1,61 @@
 package com.databaseproject.parkingproject.entity;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.List;
-
+@AllArgsConstructor
+@Getter
+@Setter
 public class ParkingLots {
+    @JsonProperty("id")
     private Integer id;
+
+    @JsonProperty("disabled_count")
     private Integer disabledCount;
+
+    @JsonProperty("regular_count")
     private Integer regularCount;
-    private boolean isHighDemandArea;
+
+    @JsonProperty("EV_count")
     private Integer EVCount;
+
+    @JsonProperty("location")
     private String location;
 
-    public ParkingLots(Integer id, Integer disabledCount, Integer regularCount, Integer EVCount, String location) {
-        this.id = id;
-        this.disabledCount = disabledCount;
-        this.regularCount = regularCount;
-        this.EVCount = EVCount;
-        this.location = location;
-    }
+    @JsonProperty("parking_lot_manager")
+    private Integer managerId;
 
+    @JsonProperty("admitted")
+    private Boolean admitted;
+
+    // Default constructor
     public ParkingLots() {
+        this.admitted = false; // Set default value for admitted
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
+    // Constructor to initialize all fields (except 'admitted' since it has a default value)
+    public ParkingLots(Integer id, Integer disabledCount, Integer regularCount, Integer EVCount, String location, Integer managerId) {
         this.id = id;
-    }
-
-    public Integer getDisabledCount() {
-        return disabledCount;
-    }
-
-    public void setDisabledCount(Integer disabledCount) {
         this.disabledCount = disabledCount;
-    }
-
-    public Integer getRegularCount() {
-        return regularCount;
-    }
-
-    public void setRegularCount(Integer regularCount) {
         this.regularCount = regularCount;
-    }
-
-    public Integer getEVCount() {
-        return EVCount;
-    }
-
-    public void setEVCount(Integer EVCount) {
         this.EVCount = EVCount;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
         this.location = location;
+        this.managerId = managerId;
+        this.admitted = false;  // default value for 'admitted'
     }
 
     @Override
     public String toString() {
         return "ParkingLots{" +
-                "id=" + id +
+                "admitted=" + admitted +
+                ", id=" + id +
                 ", disabledCount=" + disabledCount +
                 ", regularCount=" + regularCount +
                 ", EVCount=" + EVCount +
                 ", location='" + location + '\'' +
+                ", managerId=" + managerId +
                 '}';
     }
 }
