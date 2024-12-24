@@ -62,19 +62,20 @@ parking_spot_id	int,
 foreign key (parking_spot_id) references parking_spots(id) on delete cascade
 );
 
-create table IF NOT EXISTS reservations(
-id	int auto_increment primary key not null,
-penalty	int,
-start_time	datetime,
-end_time	datetime,
-duration	timestamp,
-user_id		int,
-parking_spot_id	int,
-transaction_id	int,
-foreign key (user_id) references users(id),
-foreign key (parking_spot_id) references parking_spots(id),
-foreign key (transaction_id) references transactions(id) on delete cascade
+CREATE TABLE IF NOT EXISTS reservations (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    penalty INT DEFAULT 0,  -- Set default value to 0
+    start_time DATETIME,
+    end_time DATETIME,
+    duration TIME,
+    user_id INT,
+    parking_spot_id INT,
+    transaction_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (parking_spot_id) REFERENCES parking_spots(id),
+    FOREIGN KEY (transaction_id) REFERENCES transactions(id) ON DELETE CASCADE
 );
+
 
 CREATE TABLE IF NOT EXISTS tokens (
     id int auto_increment primary key not null,
