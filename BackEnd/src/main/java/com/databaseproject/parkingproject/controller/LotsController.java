@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/authenticate")
 @RequiredArgsConstructor
+@CrossOrigin
 public class LotsController {
     private final LotDaoImpl lotDao;
 

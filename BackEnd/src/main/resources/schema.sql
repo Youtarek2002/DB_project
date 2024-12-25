@@ -26,6 +26,38 @@ id	int auto_increment primary key not null,
 amount	int,
 time	time);
 
+CREATE TABLE IF NOT EXISTS parking_spot_changes (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    parking_spot_id INT NOT NULL,
+    old_status ENUM('OCCUPIED', 'AVAILABLE', 'RESERVED') NOT NULL,
+    new_status ENUM('OCCUPIED', 'AVAILABLE', 'RESERVED') NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (parking_spot_id) REFERENCES parking_spots(id) ON DELETE CASCADE
+);
+create table IF NOT EXISTS parking_spots(
+    id int auto_increment primary key not null,
+    status	enum('OCCUPIED','AVAILABLE','RESERVED') not null DEFAULT 'AVAILABLE',
+    type	varchar(100),
+    price	int DEFAULT 0,
+    parking_lot_id	int,
+    foreign key (parking_lot_id) references parking_lots(id) on delete cascade
+);
+
+# CREATE TRIGGER after_update_parking_spots
+#     AFTER UPDATE ON parking_spots
+#     FOR EACH ROW
+# BEGIN
+#     INSERT INTO parking_spot_changes (parking_spot_id, old_status, new_status)
+#     VALUES (OLD.id, OLD.status, NEW.status);
+# END;
+
+# UPDATE parking_spots SET status = 'AVAILABLE' WHERE id = 314;
+
+# DROP TRIGGER IF EXISTS after_update_parking_spots;
+
+# SHOW GRANTS FOR CURRENT_USER;
+
+
 
 CREATE TABLE IF NOT EXISTS parking_lots (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
@@ -38,13 +70,6 @@ CREATE TABLE IF NOT EXISTS parking_lots (
     FOREIGN KEY (parking_lot_manager) REFERENCES users(id)
 );
 
-create table IF NOT EXISTS parking_spots(
-id int auto_increment primary key not null,
-type	varchar(100),
-price	int DEFAULT 0,
-parking_lot_id	int,
-foreign key (parking_lot_id) references parking_lots(id) on delete cascade
- );
  create table IF NOT EXISTS time_slots(
  id int auto_increment primary key not null,
  status	enum('OCCUPIED','AVAILABLE','RESERVED') not null DEFAULT 'AVAILABLE',
