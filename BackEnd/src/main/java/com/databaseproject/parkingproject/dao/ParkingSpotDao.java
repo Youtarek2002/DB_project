@@ -42,22 +42,17 @@ public class ParkingSpotDao {
             return;
         }
 
-        // Generate placeholders for the IN clause based on the number of IDs in the list
         String placeholders = reservedSpotIds.stream()
                 .map(id -> "?")
                 .collect(Collectors.joining(", "));
 
-        // Build the final SQL query with the placeholders
         String sql = String.format(SQL_UPDATE_ALL_SPOTS_EXCEPT, placeholders);
 
-        // Prepare the parameters for the update query
         Object[] params = new Object[reservedSpotIds.size() + 1];
         params[0] = status;
         for (int i = 0; i < reservedSpotIds.size(); i++) {
             params[i + 1] = reservedSpotIds.get(i);
         }
-
-        // Execute the update query
         jdbcTemplate.update(sql, params);
     }
 
