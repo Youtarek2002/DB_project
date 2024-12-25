@@ -35,13 +35,13 @@ public class ReservationDao {
     private static final String SQL_GET_PARKING_LOT_RESERVATIONS = "SELECT r.* FROM reservations r JOIN parking_spots ps ON r.parking_spot_id = ps.id WHERE ps.parking_lot_id = ?;";
     private static final String SQL_CHECK_SPOT_AVAILABILITY = "SELECT COUNT(*) FROM reservations WHERE parking_spot_id = ? AND start_time < ? AND end_time > ? AND penalty=0;";
     private static final String SQL_GET_EXPIRED_USER_RESERVATIONS =
-            "SELECT * FROM reservations WHERE user_id = ? AND end_time < NOW()";
+            "SELECT * FROM reservations WHERE user_id = ? AND end_time < NOW() AND penalty>0";
 
     private static final String SQL_GET_EXPIRED_LOT_RESERVATIONS =
             "SELECT r.* " +
                     "FROM reservations r " +
                     "JOIN parking_spots ps ON r.parking_spot_id = ps.id " +
-                    "WHERE ps.parking_lot_id = ? AND r.end_time < NOW()";
+                    "WHERE ps.parking_lot_id = ? AND r.end_time < NOW() AND penalty>0";
     private static final String SQL_GET_RESERVATIONS_BY_TIME =
             "SELECT * FROM reservations WHERE start_time <= ? AND end_time > ? AND penalty = 0";
 

@@ -10,12 +10,19 @@ import java.util.stream.Collectors;
 public class ParkingSpotDao {
     private static final String SQL_UPDATE_SPOT_STATUS = "UPDATE parking_spots SET status = ? WHERE id = ?";
     private static final String SQL_MARK_AVAILABLE_EXPIRED_RESERVATIONS =
-            "UPDATE parking_spots ps " +
-                    "SET ps.status = 'AVAILABLE' " +
-                    "WHERE ps.status= 'RESERVED' AND ps.id IN ( " +
-                    "    SELECT DISTINCT r.parking_spot_id " +
-                    "    FROM reservations r " +
-                    "    WHERE r.penalty > 0" +
+            "UPDATE parking_spots ps \n" +
+                    "SET ps.status = 'AVAILABLE' \n" +
+                    "WHERE ps.status = 'RESERVED' \n" +
+                    "AND ps.id IN (\n" +
+                    "    SELECT DISTINCT r.parking_spot_id\n" +
+                    "    FROM reservations r\n" +
+                    "    INNER JOIN (\n" +
+                    "        SELECT parking_spot_id, MAX(id) AS last_reservation_id\n" +
+                    "        FROM reservations\n" +
+                    "        GROUP BY parking_spot_id\n" +
+                    "    ) latest_reservations\n" +
+                    "    ON r.id = latest_reservations.last_reservation_id\n" +
+                    "    WHERE r.penalty > 0 AND start_time > NOW()" +
                     ");";
     private static final String SQL_UPDATE_ALL_SPOTS_EXCEPT =
             "UPDATE parking_spots " +

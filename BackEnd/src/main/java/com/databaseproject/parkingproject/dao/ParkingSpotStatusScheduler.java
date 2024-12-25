@@ -29,6 +29,6 @@ public class ParkingSpotStatusScheduler {
                 .map(Reservations::getParkingSpotId)
                 .toList();
 
-       parkingSpotDao.updateAllSpotsExcept(reservedSpotIds, "AVAILABLE");
+        parkingSpotDao.updateAllSpotsExcept(reservedSpotIds, "AVAILABLE");
     }
 }
