@@ -70,6 +70,15 @@ public class ReservationController {
         int totalPenalty = reservationDao.getTotalPenaltyForUser(userId);
         return totalPenalty;
     }
+    @GetMapping("/expired/user")
+    public List<Reservations> getExpiredReservationsForUser(@RequestParam int userId) {
+        return reservationDao.getExpiredReservationsForUser(userId);
+    }
+
+    @GetMapping("/expired/lot")
+    public List<Reservations> getExpiredReservationsForLot(@RequestParam int lotId) {
+        return reservationDao.getExpiredReservationsForLot(lotId);
+    }
 
 
 }

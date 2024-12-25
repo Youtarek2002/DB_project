@@ -24,18 +24,23 @@ public class ReservationDao {
     private static final String SQL_GET_ALL_RESERVATIONS = "SELECT id, penalty, start_time, end_time, duration, user_id, parking_spot_id, transaction_id FROM reservations;";
     private static final String SQL_GET_USER_RESERVATIONS = "SELECT * FROM reservations WHERE user_id = ?;";
     private static final String SQL_MARK_EXPIRED_RESERVATIONS = "UPDATE reservations SET penalty = penalty + 50 WHERE end_time < NOW() AND penalty = 0;";
-    private static final String SQL_GET_AVAILABLE_SPOTS = "SELECT ps.id, ps.type, ps.price, ps.parking_lot_id " +
+    private static final String SQL_GET_AVAILABLE_SPOTS = "SELECT ps.id, ps.type, ps.price, ps.parking_lot_id, ts.status " +
             "FROM parking_spots ps " +
+            "LEFT JOIN time_slots ts ON ps.id = ts.parking_spot_id " +
             "WHERE ps.parking_lot_id = ? " +
-            "AND ps.id NOT IN (" +
-            "    SELECT ts.parking_spot_id " +
-            "    FROM time_slots ts " +
-            "    WHERE ts.start_time BETWEEN ? AND ? " +
-            "    AND ts.status != 'AVAILABLE'" +
-            ");";
+            "AND (ts.start_time IS NULL OR ts.start_time NOT BETWEEN ? AND ? OR ts.status = 'AVAILABLE')";
     private static final String SQL_USER_PENALTY = "SELECT SUM(penalty) FROM reservations WHERE user_id = ?";
     private static final String SQL_GET_PARKING_LOT_RESERVATIONS = "SELECT r.* FROM reservations r JOIN parking_spots ps ON r.parking_spot_id = ps.id WHERE ps.parking_lot_id = ?;";
     private static final String SQL_CHECK_SPOT_AVAILABILITY = "SELECT COUNT(*) FROM reservations WHERE parking_spot_id = ? AND start_time < ? AND end_time > ?;";
+    private static final String SQL_GET_EXPIRED_USER_RESERVATIONS =
+            "SELECT * FROM reservations WHERE user_id = ? AND end_time < NOW()";
+
+    private static final String SQL_GET_EXPIRED_LOT_RESERVATIONS =
+            "SELECT r.* " +
+                    "FROM reservations r " +
+                    "JOIN parking_spots ps ON r.parking_spot_id = ps.id " +
+                    "WHERE ps.parking_lot_id = ? AND r.end_time < NOW()";
+
     private final JdbcTemplate jdbcTemplate;
 
     public ReservationDao(JdbcTemplate jdbcTemplate) {
@@ -129,6 +134,14 @@ public class ReservationDao {
         Integer totalPenalty = jdbcTemplate.queryForObject(SQL_USER_PENALTY, new Object[]{userId}, Integer.class);
         return totalPenalty != null ? totalPenalty : 0;
     }
+    public List<Reservations> getExpiredReservationsForUser(int userId) {
+        return jdbcTemplate.query(SQL_GET_EXPIRED_USER_RESERVATIONS, new Object[]{userId}, new ReservationRowMapper());
+    }
+
+    public List<Reservations> getExpiredReservationsForLot(int lotId) {
+        return jdbcTemplate.query(SQL_GET_EXPIRED_LOT_RESERVATIONS, new Object[]{lotId}, new ReservationRowMapper());
+    }
+
 
     private void createTimeSlotsForReservation(int parkingSpotId, LocalDateTime startTime, LocalDateTime endTime, String status) {
         LocalDateTime currentTime = startTime;
