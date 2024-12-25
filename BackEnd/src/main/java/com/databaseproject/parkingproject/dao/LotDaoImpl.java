@@ -18,7 +18,7 @@ public class LotDaoImpl {
     private static final String SQL_UPDATE_LOT_REGULAR_COUNT = "UPDATE parking_lots SET regular_count = ? WHERE id = ?;";
     private static final String SQL_UPDATE_LOT_DISABLED_COUNT = "UPDATE parking_lots SET disabled_count = ? WHERE id = ?;";
     private static final String SQL_UPDATE_LOT_EV_COUNT = "UPDATE parking_lots SET EV_count = ? WHERE id = ?;";
-    private static final String SQL_ADDMIT_LOT =  "UPDATE parking_lots SET admitted = ? WHERE id = ?;";
+    private static final String SQL_ADMIT_LOT =  "UPDATE parking_lots SET admitted = ? WHERE id = ?;";
     private static final String SQL_INSERT_SPOT ="INSERT INTO parking_spots (type ,parking_lot_id) VALUES (?,?);";
     private static final String SQL_GET_LOT_BY_ID ="SELECT * FROM parking_lots WHERE id = ?";
     private static final String SQL_GET_NEW_SPOT ="SELECT id FROM parking_spots \n" +
@@ -64,7 +64,7 @@ public class LotDaoImpl {
     }
 
     public ResponseMessageDto addmitLot(int id) {
-        int k = jdbcTemplate.update(SQL_ADDMIT_LOT, true,id);
+        int k = jdbcTemplate.update(SQL_ADMIT_LOT, true,id);
 
         String message = (k == 1) ? "Request has been sent" : "Error in sending the request";
         ParkingLots parkingLots = getParkingLot(id);
