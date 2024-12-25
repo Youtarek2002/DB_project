@@ -43,6 +43,7 @@ id int auto_increment primary key not null,
 type	varchar(100),
 price	int DEFAULT 0,
 parking_lot_id	int,
+status	enum('OCCUPIED','AVAILABLE','RESERVED') not null DEFAULT "AVAILABLE",
 foreign key (parking_lot_id) references parking_lots(id) on delete cascade
  );
  create table IF NOT EXISTS time_slots(

@@ -23,7 +23,9 @@ public class ReservationDao {
     private static final String SQL_UPDATE_RESERVATION = "UPDATE reservations SET parking_spot_id = ?, user_id = ?, start_time = ?, end_time = ?, penalty = ? WHERE id = ?;";
     private static final String SQL_GET_ALL_RESERVATIONS = "SELECT id, penalty, start_time, end_time, duration, user_id, parking_spot_id, transaction_id FROM reservations;";
     private static final String SQL_GET_USER_RESERVATIONS = "SELECT * FROM reservations WHERE user_id = ?;";
-    private static final String SQL_MARK_EXPIRED_RESERVATIONS = "UPDATE reservations SET penalty = penalty + 50 WHERE end_time < NOW() AND penalty = 0;";
+    private static final String SQL_MARK_EXPIRED_RESERVATIONS = "UPDATE reservations \n" +
+            "SET penalty = penalty + 50 \n" +
+            "WHERE start_time < NOW() - INTERVAL 15 MINUTE AND penalty = 0;\n";
     private static final String SQL_GET_AVAILABLE_SPOTS = "SELECT ps.id, ps.type, ps.price, ps.parking_lot_id, ts.status " +
             "FROM parking_spots ps " +
             "LEFT JOIN time_slots ts ON ps.id = ts.parking_spot_id " +
@@ -40,6 +42,8 @@ public class ReservationDao {
                     "FROM reservations r " +
                     "JOIN parking_spots ps ON r.parking_spot_id = ps.id " +
                     "WHERE ps.parking_lot_id = ? AND r.end_time < NOW()";
+    private static final String SQL_GET_RESERVATIONS_BY_TIME =
+            "SELECT * FROM reservations WHERE start_time <= ? AND end_time > ?";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -159,7 +163,13 @@ public class ReservationDao {
     private Reservations getReservationById(int id) {
         return jdbcTemplate.queryForObject(SQL_GET_RESERVATION_BY_ID, new Object[]{id}, new ReservationRowMapper());
     }
-
+    public List<Reservations> getReservationsByTime(LocalDateTime now) {
+        return jdbcTemplate.query(
+                SQL_GET_RESERVATIONS_BY_TIME,
+                new Object[]{now, now},
+                new ReservationRowMapper()
+        );
+    }
     public class ReservationRowMapper implements RowMapper<Reservations> {
         @Override
         public Reservations mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -181,10 +191,27 @@ public class ReservationDao {
         public ParkingSpots mapRow(ResultSet rs, int rowNum) throws SQLException {
             ParkingSpots spot = new ParkingSpots();
             spot.setId(rs.getInt("id"));
+
+            String statusStr = rs.getString("status");
+            if (statusStr != null) {
+                try {
+                    spot.setStatus(ParkingSpots.Status.valueOf(statusStr));
+                } catch (IllegalArgumentException e) {
+                    spot.setStatus(ParkingSpots.Status.AVAILABLE);
+                    System.out.println("Invalid status value: " + statusStr);
+
+                }
+            } else {
+                spot.setStatus(ParkingSpots.Status.AVAILABLE);
+            }
+
             spot.setType(rs.getString("type"));
             spot.setPrice(rs.getInt("price"));
             spot.setParkingLotId(rs.getInt("parking_lot_id"));
             return spot;
         }
     }
+
+
+
 }

@@ -7,10 +7,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ReservationExpiryService {
     private final ReservationDao reservationDao;
+    private final ParkingSpotDao parkingSpotDao;
 
     @Scheduled(fixedRate = 60000)
     public void expireReservationsAutomatically() {
         reservationDao.expireReservations();
         System.out.println("Checked and expired reservations if necessary.");
+        parkingSpotDao.markAvailableForExpiredReservations();
+
     }
 }
