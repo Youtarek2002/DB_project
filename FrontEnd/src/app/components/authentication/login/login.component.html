@@ -1,0 +1,20 @@
+<div class="main">
+    <div class="content">
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+            <h3>LOGIN</h3>
+
+            <!-- <p-floatLabel class="area">
+                <input pInputText id="email" formControlName="email" />
+                <label for="email">Email</label>
+            </p-floatLabel> -->
+
+            <!-- <p-floatLabel class="area"> -->
+                <input pInputText type="password" id="password" formControlName="password" />
+                <label for="password">Password</label>
+            <!-- </p-floatLabel>  -->
+
+            <button type="submit">LOGIN</button>
+            <a routerLink="/signup">new here? Sign Up now</a>
+       </form>
+    </div>
+</div>
