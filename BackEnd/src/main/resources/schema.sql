@@ -26,13 +26,14 @@ id	int auto_increment primary key not null,
 amount	int,
 time	time);
 
-
 CREATE TABLE IF NOT EXISTS parking_lots (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     disabled_count INT NOT NULL DEFAULT 0,
     regular_count INT NOT NULL DEFAULT 0,
     EV_count INT NOT NULL DEFAULT 0,
     location VARCHAR(500) NOT NULL,
+    latitude DECIMAL(10, 8),
+    longitude DECIMAL(11, 8),
     parking_lot_manager INT,
     admitted BOOLEAN,
     FOREIGN KEY (parking_lot_manager) REFERENCES users(id)

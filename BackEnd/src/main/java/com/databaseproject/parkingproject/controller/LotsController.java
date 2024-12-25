@@ -16,7 +16,7 @@ public class LotsController {
 
     @GetMapping("/accept/adding/lot")
     public ResponseMessageDto acceptAddingLot(@RequestParam int id) {
-        return lotDao.addmitLot(id);
+        return lotDao.admitLot(id);
     }
 
     @PostMapping("/request/adding/lot")
@@ -29,6 +29,12 @@ public class LotsController {
     public ResponseMessageDto denyAddingLot(@RequestParam int id) {
         return lotDao.denyAddingLot(id);
     }
+
+    @DeleteMapping("/delete/lot")
+    public ResponseMessageDto deleteLot(@RequestParam int id) {
+        return lotDao.deleteLot(id);
+    }
+
     @GetMapping("/all/pending/lots")
     public ParkingLots[] allPendingApproved() {
         List<ParkingLots> lotList = lotDao.getAllPendingLots();
@@ -39,5 +45,12 @@ public class LotsController {
         List<ParkingLots> lotList = lotDao.getManagerLots(managerId);
         return lotList.toArray(new ParkingLots[0]);
     }
+    @GetMapping("/nearest/lots")
+    public ParkingLots[]  findAndPrintNearestLots(@RequestParam double userLat,@RequestParam double userLng) {
+        List<ParkingLots> nearestLots = lotDao.findNearestParkingLots(userLat, userLng, 5);
+        nearestLots.forEach(lot -> System.out.println("Lot: " + lot));
+        return nearestLots.toArray(new ParkingLots[0]);
+    }
+
 
 }

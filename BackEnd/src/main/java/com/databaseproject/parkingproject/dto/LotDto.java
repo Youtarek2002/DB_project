@@ -1,4 +1,5 @@
 package com.databaseproject.parkingproject.dto;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,4 +15,6 @@ public class LotDto {
     private int regular_count;
     private int EV_count;
     private String location;
+    private double latitude;
+    private double longitude;
 }
