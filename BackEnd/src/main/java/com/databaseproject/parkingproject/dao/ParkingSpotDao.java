@@ -12,15 +12,15 @@ public class ParkingSpotDao {
     private static final String SQL_MARK_AVAILABLE_EXPIRED_RESERVATIONS =
             "UPDATE parking_spots ps " +
                     "SET ps.status = 'AVAILABLE' " +
-                    "WHERE ps.id IN ( " +
+                    "WHERE ps.status= 'RESERVED' AND ps.id IN ( " +
                     "    SELECT DISTINCT r.parking_spot_id " +
                     "    FROM reservations r " +
-                    "    WHERE r.end_time < NOW() AND r.penalty > 0" +
+                    "    WHERE r.penalty > 0" +
                     ");";
     private static final String SQL_UPDATE_ALL_SPOTS_EXCEPT =
             "UPDATE parking_spots " +
                     "SET status = ? " +
-                    "WHERE id NOT IN (%s)";
+                    "WHERE id NOT IN (%s) AND status != 'OCCUPIED'";
     private final JdbcTemplate jdbcTemplate;
 
     public void markAvailableForExpiredReservations() {
