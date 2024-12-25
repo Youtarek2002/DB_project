@@ -20,7 +20,7 @@ public class LotDaoImpl {
     private static final String SQL_UPDATE_LOT_DISABLED_COUNT = "UPDATE parking_lots SET disabled_count = ? WHERE id = ?;";
     private static final String SQL_UPDATE_LOT_EV_COUNT = "UPDATE parking_lots SET EV_count = ? WHERE id = ?;";
     private static final String SQL_ADDMIT_LOT =  "UPDATE parking_lots SET admitted = ? WHERE id = ?;";
-    private static final String SQL_INSERT_SPOT ="INSERT INTO parking_spots (type ,parking_lot_id,status,price) VALUES (?,?,?,?);";
+    private static final String SQL_INSERT_SPOT ="INSERT INTO parking_spots (type ,parking_lot_id) VALUES (?,?);";
     private static final String SQL_GET_LOT_BY_ID ="SELECT * FROM parking_lots WHERE id = ?";
     private static final String SQL_GET_NEW_SPOT ="SELECT id FROM parking_spots \n" +
             "WHERE id NOT IN (SELECT DISTINCT parking_spot_id FROM time_slots)\n" +
@@ -44,12 +44,12 @@ public class LotDaoImpl {
     private final JdbcTemplate jdbcTemplate;
     private final DynamicPriceService dynamicPriceService;
 
-    public LotDaoImpl(JdbcTemplate jdbcTemplate, DynamicPriceService dynamicPriceService) {
+    public LotDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.dynamicPriceService = dynamicPriceService;
     }
 
-    public ResponseMessageDto requestInsertingLot(ParkingLots lot) {
+    public ResponseMessageDto requsetInsertingLot(ParkingLots lot) {
         if (lot.getEVCount() == null || lot.getRegularCount() == null || lot.getDisabledCount() == null) {
             return new ResponseMessageDto("All counts must be provided", false, 400, null);
         }
@@ -59,6 +59,8 @@ public class LotDaoImpl {
                 lot.getRegularCount(),
                 lot.getEVCount(),
                 lot.getLocation(),
+                lot.getLatitude(),
+                lot.getLongitude(),
                 lot.getManagerId(),
                 false);
 
@@ -72,10 +74,9 @@ public class LotDaoImpl {
         String message = (k == 1) ? "Request has been sent" : "Error in sending the request";
         ParkingLots parkingLots = getParkingLot(id);
         System.out.println("TEESSST  "+parkingLots.toString());
-        int price=dynamicPriceService.calculatePrice(id);
-        generateLotSpots(id,parkingLots.getDisabledCount(),"DISABLED",price );
-        generateLotSpots(id,parkingLots.getRegularCount(),"REGULAR" ,price);
-        generateLotSpots(id,parkingLots.getEVCount(),"EV",price);
+        generateLotSpots(id,parkingLots.getDisabledCount(),"DISABLED" );
+        generateLotSpots(id,parkingLots.getRegularCount(),"REGULAR" );
+        generateLotSpots(id,parkingLots.getEVCount(),"EV");
         return new ResponseMessageDto(message, k == 1, k == 1 ? 200 : 404, null);
     }
 
@@ -105,11 +106,11 @@ public class LotDaoImpl {
 
     }
 
-    private void  generateLotSpots(int lotId,int count , String type,int price)
+    private void  generateLotSpots(int lotId,int count , String type)
     {
           for(int i=0; i<count; i++)
           {
-              jdbcTemplate.update(SQL_INSERT_SPOT,type,lotId,"AVAILABLE",price);
+              jdbcTemplate.update(SQL_INSERT_SPOT,type,lotId);
               generateSpotTimeSlots();
           }
     }
@@ -124,20 +125,7 @@ public class LotDaoImpl {
     }
 
     public List<ParkingLots> getAllPendingLots() {
-        return jdbcTemplate.query(SQL_GET_PENDING_LOTS, new RowMapper<ParkingLots>() {
-            @Override
-            public ParkingLots mapRow(ResultSet rs, int rowNum) throws SQLException {
-                ParkingLots lot=new ParkingLots();
-                lot.setId(rs.getInt("id"));
-                lot.setDisabledCount(rs.getInt("disabled_count"));
-                lot.setRegularCount(rs.getInt("regular_count"));
-                lot.setEVCount(rs.getObject("ev_count", Integer.class)); // Handles nulls correctly
-                lot.setLocation(rs.getString("location"));
-                lot.setManagerId(rs.getInt("parking_lot_manager"));
-                lot.setAdmitted(rs.getBoolean("admitted"));
-                return lot;
-            }
-        });
+        return jdbcTemplate.query(SQL_GET_PENDING_LOTS, new BeanPropertyRowMapper<>(ParkingLots.class));
     }
 
 

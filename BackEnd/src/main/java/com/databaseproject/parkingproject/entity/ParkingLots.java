@@ -24,12 +24,17 @@ public class ParkingLots {
     @JsonProperty("location")
     private String location;
 
+    @JsonProperty("latitude")
+    private Double latitude;
+
+    @JsonProperty("longitude")
+    private Double longitude;
+
     @JsonProperty("parking_lot_manager")
     private Integer managerId;
 
     @JsonProperty("admitted")
     private Boolean admitted;
-
 
     // Default constructor
     public ParkingLots() {
@@ -43,19 +48,23 @@ public class ParkingLots {
         this.regularCount = regularCount;
         this.EVCount = EVCount;
         this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.managerId = managerId;
         this.admitted = false;  // default value for 'admitted'
-
     }
 
     @Override
     public String toString() {
         return "ParkingLots{" +
-                "id=" + id +
+                "admitted=" + admitted +
+                ", id=" + id +
                 ", disabledCount=" + disabledCount +
                 ", regularCount=" + regularCount +
                 ", EVCount=" + EVCount +
                 ", location='" + location + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
                 ", managerId=" + managerId +
                 ", admitted=" + admitted +
                 '}';
