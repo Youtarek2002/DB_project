@@ -32,6 +32,7 @@ public class Users implements UserDetails{
     private String paymentMethod;
     private Role role;
     private String licensePlate;
+    private int numberOfReservations;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -175,6 +176,7 @@ public class Users implements UserDetails{
                 ", paymentMethod='" + paymentMethod + '\'' +
                 ", role=" + role +
                 ", licensePlate='" + licensePlate + '\'' +
+                ", numberOfReservations=" + numberOfReservations +
                 '}';
     }
 }

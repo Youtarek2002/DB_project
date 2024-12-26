@@ -27,6 +27,9 @@ public class ParkingLots {
     @JsonProperty("latitude")
     private Double latitude;
 
+    @JsonProperty("revenue")
+    private Integer revenue;
+
     @JsonProperty("longitude")
     private Double longitude;
 
@@ -38,11 +41,13 @@ public class ParkingLots {
 
     // Default constructor
     public ParkingLots() {
-        this.admitted = false; // Set default value for admitted
+        this.admitted = false;
+        this.revenue = 0;
+        // Set default value for admitted
     }
 
     // Constructor to initialize all fields (except 'admitted' since it has a default value)
-    public ParkingLots(Integer id, Integer disabledCount, Integer regularCount, Integer EVCount, String location, Integer managerId) {
+    public ParkingLots(Integer id, Integer disabledCount, Integer regularCount, Integer EVCount, String location, Integer managerId, Double latitude, Double longitude) {
         this.id = id;
         this.disabledCount = disabledCount;
         this.regularCount = regularCount;
@@ -52,6 +57,7 @@ public class ParkingLots {
         this.longitude = longitude;
         this.managerId = managerId;
         this.admitted = false;  // default value for 'admitted'
+        this.revenue = 0;
     }
 
     @Override
@@ -67,6 +73,7 @@ public class ParkingLots {
                 ", longitude=" + longitude +
                 ", managerId=" + managerId +
                 ", admitted=" + admitted +
+                ", revenue=" + revenue +
                 '}';
     }
 }

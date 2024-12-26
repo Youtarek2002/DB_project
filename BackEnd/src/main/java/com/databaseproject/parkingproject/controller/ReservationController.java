@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/authenticate/reservations")
 @RequiredArgsConstructor
+@CrossOrigin
 public class ReservationController {
     private final ReservationDao reservationDao;
 

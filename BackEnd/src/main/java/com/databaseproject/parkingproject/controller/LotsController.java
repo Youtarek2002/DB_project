@@ -23,7 +23,7 @@ public class LotsController {
     @PostMapping("/request/adding/lot")
     public ResponseMessageDto requestAddingLot(@RequestBody ParkingLots parkingLot) {
         System.out.println(parkingLot.toString());
-        return lotDao.requestInsertingLot(parkingLot);
+        return lotDao.requsetInsertingLot(parkingLot);
     }
 
     @GetMapping("/deny/adding/lot/request")

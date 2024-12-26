@@ -4,14 +4,12 @@ import com.databaseproject.parkingproject.dao.ParkingSpotDao;
 import com.databaseproject.parkingproject.dao.ReservationDao;
 import com.databaseproject.parkingproject.dto.ResponseMessageDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/authenticate/spot")
 @RequiredArgsConstructor
+@CrossOrigin
 public class SpotController {
     private final ParkingSpotDao parkingSpotDao;
     @PutMapping("/update-spot-status")
