@@ -48,7 +48,7 @@ public class LotsController {
     }
     @GetMapping("/nearest/lots")
     public ParkingLots[]  findAndPrintNearestLots(@RequestParam double userLat,@RequestParam double userLng) {
-        List<ParkingLots> nearestLots = lotDao.findNearestParkingLots(userLat, userLng, 5);
+        List<ParkingLots> nearestLots = lotDao.findNearestParkingLots(userLat, userLng, 10);
         nearestLots.forEach(lot -> System.out.println("Lot: " + lot));
         return nearestLots.toArray(new ParkingLots[0]);
     }

@@ -21,6 +21,15 @@ public class ParkingLots {
     @JsonProperty("EV_count")
     private Integer EVCount;
 
+    @JsonProperty("disabled_price")
+    private Integer disabledPrice;
+
+    @JsonProperty("regular_price")
+    private Integer regularPrice;
+
+    @JsonProperty("EV_price")
+    private Integer EVPrice;
+
     @JsonProperty("location")
     private String location;
 
@@ -63,17 +72,19 @@ public class ParkingLots {
     @Override
     public String toString() {
         return "ParkingLots{" +
-                "admitted=" + admitted +
-                ", id=" + id +
+                "id=" + id +
                 ", disabledCount=" + disabledCount +
                 ", regularCount=" + regularCount +
                 ", EVCount=" + EVCount +
+                ", disabledPrice=" + disabledPrice +
+                ", regularPrice=" + regularPrice +
+                ", EVPrice=" + EVPrice +
                 ", location='" + location + '\'' +
                 ", latitude=" + latitude +
+                ", revenue=" + revenue +
                 ", longitude=" + longitude +
                 ", managerId=" + managerId +
                 ", admitted=" + admitted +
-                ", revenue=" + revenue +
                 '}';
     }
 }
