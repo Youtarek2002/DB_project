@@ -38,6 +38,7 @@ public class ReservationController {
         return reservationDao.getAllReservations();
     }
 
+
     @GetMapping("/available-spots")
     public List<ParkingSpots> getAvailableSpots(
             @RequestParam String startTime,
@@ -51,6 +52,10 @@ public class ReservationController {
     @GetMapping("/user-reservations")
     public List<Reservations> getUserReservations(@RequestParam int userId) {
         return reservationDao.getUserReservations(userId);
+    }
+    @GetMapping("/valid")
+    public List<Reservations> getValidReservations(@RequestParam int userId) {
+        return reservationDao.getValidReservations(userId);
     }
 
     @GetMapping("/parking-lot-reservations")

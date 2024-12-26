@@ -23,9 +23,16 @@ public class ReservationDao {
     private static final String SQL_UPDATE_RESERVATION = "UPDATE reservations SET parking_spot_id = ?, user_id = ?, start_time = ?, end_time = ?, penalty = ? WHERE id = ?;";
     private static final String SQL_GET_ALL_RESERVATIONS = "SELECT id, penalty, start_time, end_time, duration, user_id, parking_spot_id, transaction_id FROM reservations;";
     private static final String SQL_GET_USER_RESERVATIONS = "SELECT * FROM reservations WHERE user_id = ?;";
-    private static final String SQL_MARK_EXPIRED_RESERVATIONS = "UPDATE reservations \n" +
-            "SET penalty = penalty + 50 \n" +
-            "WHERE start_time < NOW() - INTERVAL 15 MINUTE AND penalty = 0;\n";
+    private static final String SQL_GET_VALID_RESERVATIONS = "SELECT * FROM reservations WHERE user_id = ? AND penalty =0;";
+
+    private static final String SQL_MARK_EXPIRED_RESERVATIONS = """
+    UPDATE reservations r
+    JOIN parking_spots ps ON r.parking_spot_id = ps.id
+    SET r.penalty = ps.price / 2
+    WHERE r.start_time < NOW() - INTERVAL 15 MINUTE
+      AND r.penalty = 0
+      AND ps.status = 'RESERVED';
+""";
     private static final String SQL_GET_AVAILABLE_SPOTS = "SELECT ps.id, ps.type, ps.price, ps.parking_lot_id, ts.status " +
             "FROM parking_spots ps " +
             "LEFT JOIN time_slots ts ON ps.id = ts.parking_spot_id " +
@@ -170,6 +177,12 @@ public class ReservationDao {
                 new ReservationRowMapper()
         );
     }
+
+    public List<Reservations> getValidReservations(int userId) {
+        return jdbcTemplate.query(SQL_GET_VALID_RESERVATIONS, new Object[]{userId}, new ReservationRowMapper());
+
+    }
+
     public class ReservationRowMapper implements RowMapper<Reservations> {
         @Override
         public Reservations mapRow(ResultSet rs, int rowNum) throws SQLException {
