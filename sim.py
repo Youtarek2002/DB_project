@@ -38,7 +38,7 @@ def automaticChange():
 
 
 def main():
-    print("1. Manual Change\n2. Automatic Change")
+    print("1. Manual Change\n2.Random generation Change")
     choice = input("Enter your choice: ")
     if choice == "1":
         manualChange()
