@@ -13,7 +13,7 @@ public class ParkingSpotStatusScheduler {
     private final ReservationDao reservationDao;
     private final ParkingSpotDao parkingSpotDao;
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 1000)
     public void updateParkingSpotStatuses() {
         LocalDateTime now = LocalDateTime.now();
 

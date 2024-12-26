@@ -15,7 +15,7 @@ import java.util.List;
 
 @Repository
 public class LotDaoImpl {
-    private static final String SQL_INSERT_LOT = "INSERT INTO parking_lots (disabled_count, regular_count, EV_count,disabled_price,regular_price,EV_price, location, latitude, longitude, parking_lot_manager, admitted) VALUES (?, ?, ?, ?, ?, ?, ?,?,?,?, false);";
+    private static final String SQL_INSERT_LOT = "INSERT INTO parking_lots (disabled_count, regular_count, EV_count,disabled_price,regular_price,EV_price, location, latitude, longitude, parking_lot_manager, admitted) VALUES (?, ?, ?, ?, ?, ? ,? ,? ,? ,? , false);";
     private static final String SQL_DELETE_LOT = "DELETE FROM parking_lots WHERE id = ?;";
 //    private static final String SQL_UPDATE_LOT_REGULAR_COUNT = "UPDATE parking_lots SET regular_count = ? WHERE id = ?;";
 //    private static final String SQL_UPDATE_LOT_DISABLED_COUNT = "UPDATE parking_lots SET disabled_count = ? WHERE id = ?;";
@@ -72,15 +72,15 @@ public class LotDaoImpl {
                 lot.getLocation(),
                 lot.getLatitude(),
                 lot.getLongitude(),
-                lot.getManagerId(),
-                false);
+                lot.getManagerId()
+        );
 
         String message = (rowsAffected == 1) ? "Request has been sent" : "Error in sending the request";
         return new ResponseMessageDto(message, rowsAffected == 1, rowsAffected == 1 ? 200 : 404, null);
     }
 
     public ResponseMessageDto admitLot(int id) {
-        int rowsAffected = jdbcTemplate.update(SQL_ADMIT_LOT, true, id);
+        int rowsAffected = jdbcTemplate.update(SQL_ADMIT_LOT, id);
 
         String message = (rowsAffected == 1) ? "Request has been sent" : "Error in sending the request";
         ParkingLots parkingLot = getParkingLot(id);
