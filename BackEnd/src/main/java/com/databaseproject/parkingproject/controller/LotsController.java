@@ -53,5 +53,10 @@ public class LotsController {
         return nearestLots.toArray(new ParkingLots[0]);
     }
 
+    @GetMapping("/lot/spots")
+        public ParkingSpots[] getLotSpots(@RequestParam int lotId) {
+            List<ParkingSpots> lotList = lotDao.getLotSpots(lotId);
+            return lotList.toArray(new ParkingSpots[0]);
+        }
 
 }
