@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import com.databaseproject.parkingproject.entity.ParkingSpots;
 
 
 import java.sql.ResultSet;
@@ -76,7 +77,7 @@ public class LotDaoImpl {
     END;
 """;
 
-
+private static final String SQL_GET_LOT_SPOTS = "SELECT * FROM parking_spots WHERE parking_lot_id = ?";
 
 
     private final JdbcTemplate jdbcTemplate;
@@ -181,9 +182,10 @@ public ResponseMessageDto admitLot(int id) {
     public List<ParkingLots> findNearestParkingLots(double userLatitude, double userLongitude, int limit) {
         return jdbcTemplate.query(SQL_FIND_NEAREST_LOTS, new Object[]{userLatitude, userLongitude, userLatitude, limit},new ParkingLotsRowMapper());
     }
-
-
-
+    
+    public List<ParkingSpots> getLotSpots(int lotId) {
+            return jdbcTemplate.query(SQL_GET_LOT_SPOTS, new Object[]{lotId}, new ParkingSpotRowMapper());
+        }
 
     public static class ParkingLotsRowMapper implements RowMapper<ParkingLots> {
         @Override
@@ -203,6 +205,31 @@ public ResponseMessageDto admitLot(int id) {
                     rs.getInt("parking_lot_manager"),
                     rs.getBoolean("admitted")
             );
+        }
+    }
+    public class ParkingSpotRowMapper implements RowMapper<ParkingSpots> {
+        @Override
+        public ParkingSpots mapRow(ResultSet rs, int rowNum) throws SQLException {
+            ParkingSpots spot = new ParkingSpots();
+            spot.setId(rs.getInt("id"));
+
+            String statusStr = rs.getString("status");
+            if (statusStr != null) {
+                try {
+                    spot.setStatus(ParkingSpots.Status.valueOf(statusStr));
+                } catch (IllegalArgumentException e) {
+                    spot.setStatus(ParkingSpots.Status.AVAILABLE);
+                    System.out.println("Invalid status value: " + statusStr);
+
+                }
+            } else {
+                spot.setStatus(ParkingSpots.Status.AVAILABLE);
+            }
+
+            spot.setType(rs.getString("type"));
+            spot.setPrice(rs.getInt("price"));
+            spot.setParkingLotId(rs.getInt("parking_lot_id"));
+            return spot;
         }
     }
 
