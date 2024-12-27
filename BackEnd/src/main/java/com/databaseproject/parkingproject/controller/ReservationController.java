@@ -38,15 +38,21 @@ public class ReservationController {
         return reservationDao.getAllReservations();
     }
 
-
-    @GetMapping("/available-spots")
-    public List<ParkingSpots> getAvailableSpots(
+   @GetMapping("/available-spots")
+    public Map<String,Object> getAvailableSpots(
             @RequestParam String startTime,
             @RequestParam String endTime,
             @RequestParam int lotId) {
 
         return reservationDao.getAvailableSpots(startTime, endTime, lotId);
     }
+    
+    @GetMapping("/available-spots-from-now")
+    public Map<String,Object> getAvailableSpotsFromNow(@RequestParam String endTime ,@RequestParam int lotId) {
+        String startTime = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        return reservationDao.getAvailableSpots(startTime, endTime,lotId);
+    }
+
 
 
     @GetMapping("/user-reservations")
@@ -66,11 +72,7 @@ public class ReservationController {
     public ResponseMessageDto expireReservations() {
         return reservationDao.expireReservations();
     }
-    @GetMapping("/available-spots-from-now")
-    public List<ParkingSpots> getAvailableSpotsFromNow(@RequestParam String endTime ,@RequestParam int lotId) {
-        String startTime = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        return reservationDao.getAvailableSpots(startTime, endTime,lotId);
-    }
+   
     @GetMapping("/total-penalty")
     public int getTotalPenalty(@RequestParam int userId) {
         int totalPenalty = reservationDao.getTotalPenaltyForUser(userId);
