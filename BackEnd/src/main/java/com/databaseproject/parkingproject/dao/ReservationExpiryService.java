@@ -12,7 +12,7 @@ public class ReservationExpiryService {
     @Scheduled(fixedRate = 1000)
     public void expireReservationsAutomatically() {
         reservationDao.expireReservations();
-        System.out.println("Checked and expired reservations if necessary.");
+//        System.out.println("Checked and expired reservations if necessary.");
         parkingSpotDao.markAvailableForExpiredReservations();
 
     }

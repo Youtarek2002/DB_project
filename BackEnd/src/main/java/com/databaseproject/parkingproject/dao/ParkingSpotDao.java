@@ -45,7 +45,7 @@ public class ParkingSpotDao {
     }
     public void updateAllSpotsExcept(List<Integer> reservedSpotIds, String status) {
         if (reservedSpotIds == null || reservedSpotIds.isEmpty()) {
-            System.out.println("Reserved spot IDs list cannot be null or empty.");
+//            System.out.println("Reserved spot IDs list cannot be null or empty.");
             return;
         }
 

@@ -34,14 +34,12 @@ public class ReservationDao {
       AND r.penalty = 0
       AND ps.status = 'RESERVED';
 """;
-    private static final String SQL_MARK_EXPIRED_RESERVATIONS = "UPDATE reservations \n" +
-            "SET penalty = penalty + 50 \n" +
-            "WHERE start_time < NOW() - INTERVAL 15 MINUTE AND penalty = 0;\n";
     private static final String SQL_UPDATE_PARKING_SPOTS_PENALTY =
             "UPDATE parking_spots ps " +
                     "JOIN reservations r ON ps.id = r.parking_spot_id " +
-                    "SET ps.penalty = ps.penalty + 50 " +
-                    "WHERE r.start_time < NOW() - INTERVAL 15 MINUTE AND r.penalty = 50;";
+                    "SET ps.penalty = r.cost / 2 " +
+                    "WHERE r.start_time < NOW() - INTERVAL 15 MINUTE "+
+                    "AND ps.status = 'RESERVED' ";
     private static final String SQL_GET_AVAILABLE_SPOTS = "SELECT ps.id, ps.type, ps.price, ps.parking_lot_id, ts.status " +
             "FROM parking_spots ps " +
             "LEFT JOIN time_slots ts ON ps.id = ts.parking_spot_id " +
@@ -79,13 +77,8 @@ public class ReservationDao {
                 reservation.getEndTime(),
                 reservation.getPenalty(),
                 reservation.getCost());
-
-        if (rowsAffected == 1) {
           //  createTimeSlotsForReservation(reservation.getParkingSpotId(), reservation.getStartTime(), reservation.getEndTime(), "RESERVED");
             return new ResponseMessageDto("Reservation created successfully", true, 200, null);
-        } else {
-            return new ResponseMessageDto("Error creating reservation", false, 500, null);
-        }
     }
 
     public ResponseMessageDto deleteReservation(int id) {
@@ -94,7 +87,7 @@ public class ReservationDao {
             int rowsAffected = jdbcTemplate.update(SQL_DELETE_RESERVATION, id);
 
             if (rowsAffected == 1) {
-                updateTimeSlotsForReservation(reservation.getParkingSpotId(), reservation.getStartTime(), reservation.getEndTime(), "AVAILABLE");
+           //     updateTimeSlotsForReservation(reservation.getParkingSpotId(), reservation.getStartTime(), reservation.getEndTime(), "AVAILABLE");
                 return new ResponseMessageDto("Reservation deleted successfully", true, 200, null);
             }
         }
@@ -115,7 +108,7 @@ public class ReservationDao {
                 reservation.getId());
 
         if (rowsAffected == 1) {
-            updateTimeSlotsForReservation(reservation.getParkingSpotId(), reservation.getStartTime(), reservation.getEndTime(), "RESERVED");
+        //    updateTimeSlotsForReservation(reservation.getParkingSpotId(), reservation.getStartTime(), reservation.getEndTime(), "RESERVED");
             return new ResponseMessageDto("Reservation updated successfully", true, 200, null);
         } else {
             return new ResponseMessageDto("Error updating reservation", false, 500, null);
@@ -162,6 +155,7 @@ public class ReservationDao {
 
     public ResponseMessageDto expireReservations() {
         int rowsAffected = jdbcTemplate.update(SQL_MARK_EXPIRED_RESERVATIONS);
+        int k =jdbcTemplate.update(SQL_UPDATE_PARKING_SPOTS_PENALTY);
         return new ResponseMessageDto(
                 rowsAffected > 0 ? "Expired reservations updated successfully" : "No reservations to expire",
                 rowsAffected > 0,
@@ -182,18 +176,18 @@ public class ReservationDao {
     }
 
 
-    private void createTimeSlotsForReservation(int parkingSpotId, LocalDateTime startTime, LocalDateTime endTime, String status) {
-        LocalDateTime currentTime = startTime;
-        while (currentTime.isBefore(endTime) || currentTime.equals(endTime)) {
-            LocalDateTime nextTime = currentTime.plusMinutes(60);
-            jdbcTemplate.update(SQL_INSERT_TIME_SLOT, parkingSpotId, currentTime, nextTime, status);
-            currentTime = nextTime;
-        }
-    }
-
-    private void updateTimeSlotsForReservation(int parkingSpotId, LocalDateTime startTime, LocalDateTime endTime, String status) {
-        jdbcTemplate.update(SQL_UPDATE_TIME_SLOT, status, parkingSpotId, startTime, endTime);
-    }
+//    private void createTimeSlotsForReservation(int parkingSpotId, LocalDateTime startTime, LocalDateTime endTime, String status) {
+//        LocalDateTime currentTime = startTime;
+//        while (currentTime.isBefore(endTime) || currentTime.equals(endTime)) {
+//            LocalDateTime nextTime = currentTime.plusMinutes(60);
+//            jdbcTemplate.update(SQL_INSERT_TIME_SLOT, parkingSpotId, currentTime, nextTime, status);
+//            currentTime = nextTime;
+//        }
+//    }
+//
+//    private void updateTimeSlotsForReservation(int parkingSpotId, LocalDateTime startTime, LocalDateTime endTime, String status) {
+//        jdbcTemplate.update(SQL_UPDATE_TIME_SLOT, status, parkingSpotId, startTime, endTime);
+//    }
 
     private Reservations getReservationById(int id) {
         return jdbcTemplate.queryForObject(SQL_GET_RESERVATION_BY_ID, new Object[]{id}, new ReservationRowMapper());

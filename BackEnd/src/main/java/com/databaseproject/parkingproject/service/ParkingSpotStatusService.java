@@ -38,6 +38,9 @@ public class ParkingSpotStatusService {
                     String newStatus = rs.getString("new_status");
 
                     // Notify WebSocket handler
+                    if(oldStatus.equals(newStatus)){
+                        continue;
+                    }
                     String message = "Spot " + spotId + " changed from " + oldStatus + " to " + newStatus;
                     webSocketHandler.broadcastMessage(message);
 

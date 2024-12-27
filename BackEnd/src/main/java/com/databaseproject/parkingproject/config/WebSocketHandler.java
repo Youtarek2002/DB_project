@@ -30,7 +30,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
     }
 
     public void broadcastMessage(String message) throws IOException {
-        System.out.println("Broadcasting message: " + message);
+//        System.out.println("Broadcasting message: " + message);
         synchronized (sessions) {
             for (WebSocketSession session : sessions) {
                 if (session.isOpen()) {
