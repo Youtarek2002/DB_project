@@ -26,6 +26,11 @@ public class ReservationDao {
     private static final String SQL_MARK_EXPIRED_RESERVATIONS = "UPDATE reservations \n" +
             "SET penalty = penalty + 50 \n" +
             "WHERE start_time < NOW() - INTERVAL 15 MINUTE AND penalty = 0;\n";
+    private static final String SQL_UPDATE_PARKING_SPOTS_PENALTY =
+            "UPDATE parking_spots ps " +
+                    "JOIN reservations r ON ps.id = r.parking_spot_id " +
+                    "SET ps.penalty = ps.penalty + 50 " +
+                    "WHERE r.start_time < NOW() - INTERVAL 15 MINUTE AND r.penalty = 50;";
     private static final String SQL_GET_AVAILABLE_SPOTS = "SELECT ps.id, ps.type, ps.price, ps.parking_lot_id, ts.status " +
             "FROM parking_spots ps " +
             "LEFT JOIN time_slots ts ON ps.id = ts.parking_spot_id " +
@@ -127,6 +132,7 @@ public class ReservationDao {
 
     public ResponseMessageDto expireReservations() {
         int rowsAffected = jdbcTemplate.update(SQL_MARK_EXPIRED_RESERVATIONS);
+        int k=jdbcTemplate.update(SQL_UPDATE_PARKING_SPOTS_PENALTY);
         return new ResponseMessageDto(
                 rowsAffected > 0 ? "Expired reservations updated successfully" : "No reservations to expire",
                 rowsAffected > 0,

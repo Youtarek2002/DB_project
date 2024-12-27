@@ -1,6 +1,7 @@
 package com.databaseproject.parkingproject.service;
 
 import com.databaseproject.parkingproject.entity.ParkingLots;
+import com.databaseproject.parkingproject.entity.ParkingSpots;
 import com.databaseproject.parkingproject.entity.Users;
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -23,6 +24,16 @@ public class ReportService {
         String findTopLots="SELECT * FROM parking_lots ORDER BY revenue DESC LIMIT 5";
         List<ParkingLots> topLots = jdbcTemplate.query(findTopLots, new BeanPropertyRowMapper<>(ParkingLots.class));
 
-        pdfReportService.generatePDFReport(topUsers, topLots);
+        pdfReportService.generateAdminReport(topUsers, topLots);
+    }
+
+    public void generateManagerReport(int managerId) {
+        List<ParkingSpots> topSpotsByRevenue = jdbcTemplate.query("SELECT * FROM parking_spots WHERE parking_lot_id IN (SELECT id FROM parking_lots WHERE parking_lot_manager = ?) ORDER BY revenue DESC LIMIT 5",
+                new BeanPropertyRowMapper<>(ParkingSpots.class), managerId);
+        List<ParkingSpots> topSpotsByPenalty= jdbcTemplate.query("SELECT * FROM parking_spots WHERE parking_lot_id IN (SELECT id FROM parking_lots WHERE parking_lot_manager = ?) ORDER BY penalty DESC LIMIT 5",
+                new BeanPropertyRowMapper<>(ParkingSpots.class), managerId);
+
+
+        pdfReportService.generateManagerReport(topSpotsByRevenue, topSpotsByPenalty);
     }
 }

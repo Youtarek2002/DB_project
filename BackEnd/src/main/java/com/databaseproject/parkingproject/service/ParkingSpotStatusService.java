@@ -28,6 +28,9 @@ public class ParkingSpotStatusService {
             String query = "SELECT id, parking_spot_id, old_status, new_status FROM parking_spot_changes";
             try (PreparedStatement stmt = connection.prepareStatement(query);
                  ResultSet rs = stmt.executeQuery()) {
+                if (!rs.isBeforeFirst()) {
+                    return; // Exit if there are no rows
+                }
                 while (rs.next()) {
                     int id = rs.getInt("id");
                     int spotId = rs.getInt("parking_spot_id");

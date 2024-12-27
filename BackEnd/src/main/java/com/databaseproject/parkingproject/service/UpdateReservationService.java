@@ -23,7 +23,7 @@ public class UpdateReservationService {
                 stmt.executeUpdate();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 }

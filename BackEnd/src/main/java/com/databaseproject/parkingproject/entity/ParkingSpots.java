@@ -22,6 +22,8 @@ public class ParkingSpots {
     private String type;
     private Integer price;
     private Integer parkingLotId;
+    private Integer revenue;
+    private Integer penalty;
 
     public enum Status {
         OCCUPIED,
@@ -29,12 +31,14 @@ public class ParkingSpots {
         RESERVED
     }
 
-    public ParkingSpots(Integer id, Status status, String type, Integer price, Integer parkingLotId) {
+    public ParkingSpots(Integer id, Status status, String type, Integer price, Integer parkingLotId, Integer revenue, Integer penalty) {
         this.id = id;
         this.status = status;
         this.type = type;
         this.price = price;
         this.parkingLotId = parkingLotId;
+        this.revenue = revenue;
+        this.penalty = penalty;
     }
 
     public ParkingSpots() {
@@ -80,6 +84,22 @@ public class ParkingSpots {
         this.parkingLotId = parkingLotId;
     }
 
+    public Integer getRevenue() {
+        return revenue;
+    }
+
+    public void setRevenue(Integer revenue) {
+        this.revenue = revenue;
+    }
+
+    public Integer getPenalty() {
+        return penalty;
+    }
+
+    public void setPenalty(Integer penalty) {
+        this.penalty = penalty;
+    }
+
     @Override
     public String toString() {
         return "ParkingSpots{" +
@@ -88,6 +108,8 @@ public class ParkingSpots {
                 ", type='" + type + '\'' +
                 ", price=" + price +
                 ", parkingLotId=" + parkingLotId +
+                ", revenue=" + revenue +
+                ", penalty=" + penalty +
                 '}';
     }
 }

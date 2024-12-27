@@ -3,7 +3,6 @@ package com.databaseproject.parkingproject.dao;
 import com.databaseproject.parkingproject.dto.ResponseMessageDto;
 import com.databaseproject.parkingproject.entity.ParkingLots;
 import com.databaseproject.parkingproject.service.DynamicPriceService;
-import com.databaseproject.parkingproject.entity.ParkingLots;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -22,7 +21,7 @@ public class LotDaoImpl {
     private static final String SQL_UPDATE_LOT_DISABLED_COUNT = "UPDATE parking_lots SET disabled_count = ? WHERE id = ?;";
     private static final String SQL_UPDATE_LOT_EV_COUNT = "UPDATE parking_lots SET EV_count = ? WHERE id = ?;";
     private static final String SQL_ADMIT_LOT =  "UPDATE parking_lots SET admitted = ? WHERE id = ?;";
-    private static final String SQL_INSERT_SPOT = "INSERT INTO parking_spots (type, parking_lot_id,status,price) VALUES (?, ?,?,?);";
+    private static final String SQL_INSERT_SPOT = "INSERT INTO parking_spots (type, parking_lot_id,status,price,revenue,penalty) VALUES (?, ?,?,?,?,?);";
     private static final String SQL_GET_LOT_BY_ID = "SELECT * FROM parking_lots WHERE id = ?;";
     private static final String SQL_GET_NEW_SPOT = "SELECT id FROM parking_spots WHERE id NOT IN (SELECT DISTINCT parking_spot_id FROM time_slots) LIMIT 1;";
     private static final String SQL_INSERT_TIME_SLOTS = """
@@ -107,9 +106,9 @@ public class LotDaoImpl {
                 ));
     }
 
-    private void generateLotSpots(int lotId, int count, String type,int price) {
+    private void generateLotSpots(int lotId, int count, String type, int price) {
         for (int i = 0; i < count; i++) {
-            jdbcTemplate.update(SQL_INSERT_SPOT, type, lotId, "AVAILABLE",price);
+            jdbcTemplate.update(SQL_INSERT_SPOT, type, lotId, "AVAILABLE",price, 0, 0);
             generateSpotTimeSlots();
         }
     }
