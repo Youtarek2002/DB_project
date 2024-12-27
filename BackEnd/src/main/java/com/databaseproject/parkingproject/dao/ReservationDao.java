@@ -1,17 +1,20 @@
 package com.databaseproject.parkingproject.dao;
 
-import com.databaseproject.parkingproject.dto.ResponseMessageDto;
-import com.databaseproject.parkingproject.entity.ParkingSpots;
-import com.databaseproject.parkingproject.entity.Reservations;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Repository;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.databaseproject.parkingproject.dto.ResponseMessageDto;
+import com.databaseproject.parkingproject.entity.ParkingSpots;
+import com.databaseproject.parkingproject.entity.Reservations;
 
 @Repository
 public class ReservationDao {
@@ -33,7 +36,7 @@ public class ReservationDao {
             "AND (ts.start_time IS NULL OR ts.start_time NOT BETWEEN ? AND ? OR ts.status = 'AVAILABLE')";
     private static final String SQL_USER_PENALTY = "SELECT SUM(penalty) FROM reservations WHERE user_id = ?";
     private static final String SQL_GET_PARKING_LOT_RESERVATIONS = "SELECT r.* FROM reservations r JOIN parking_spots ps ON r.parking_spot_id = ps.id WHERE ps.parking_lot_id = ?;";
-    private static final String SQL_CHECK_SPOT_AVAILABILITY = "SELECT COUNT(*) FROM reservations WHERE parking_spot_id = ? AND start_time < ? AND end_time > ? AND penalty=0;";
+    private static final String SQL_CHECK_SPOT_AVAILABILITY = "SELECT COUNT(*) FROM reservations WHERE parking_spot_id = ? AND start_time < ? AND end_time > ? AND penalty=0 FOR UPDATE;";
     private static final String SQL_GET_EXPIRED_USER_RESERVATIONS =
             "SELECT * FROM reservations WHERE user_id = ? AND end_time < NOW() AND penalty>0";
 
@@ -51,6 +54,8 @@ public class ReservationDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+
+    @Transactional(isolation=Isolation.SERIALIZABLE)
     public ResponseMessageDto createReservation(Reservations reservation) {
         if (isSpotAlreadyBooked(reservation.getParkingSpotId(), reservation.getStartTime(), reservation.getEndTime())) {
             return new ResponseMessageDto("Parking spot already reserved for the selected time.", false, 400, null);
@@ -107,7 +112,7 @@ public class ReservationDao {
     public List<Reservations> getParkingLotReservations(int parkingLotId) {
         return jdbcTemplate.query(SQL_GET_PARKING_LOT_RESERVATIONS, new Object[]{parkingLotId}, new ReservationRowMapper());
     }
-
+    @Transactional(isolation=Isolation.SERIALIZABLE)
     private boolean isSpotAlreadyBooked(int parkingSpotId, LocalDateTime startTime,LocalDateTime  endTime) {
         Integer count = jdbcTemplate.queryForObject(SQL_CHECK_SPOT_AVAILABILITY, new Object[]{parkingSpotId, endTime, startTime}, Integer.class);
         return count != null && count > 0;
