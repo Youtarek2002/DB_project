@@ -11,18 +11,29 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Repository
 public class ReservationDao {
-    private static final String SQL_GET_RESERVATION_BY_ID = "SELECT id, penalty, start_time, end_time, duration, user_id, parking_spot_id, transaction_id FROM reservations WHERE id = ?";
-    private static final String SQL_UPDATE_TIME_SLOT = "UPDATE time_slots SET status = ? WHERE parking_spot_id = ? AND start_time BETWEEN ? AND ?";
-    private static final String SQL_INSERT_TIME_SLOT = "INSERT INTO time_slots (parking_spot_id, start_time, end_time, status) VALUES (?, ?, ?, ?)";
-    private static final String SQL_INSERT_RESERVATION = "INSERT INTO reservations (parking_spot_id, user_id, start_time, end_time, penalty) VALUES (?, ?, ?, ?, ?);";
+    private static final String SQL_GET_RESERVATION_BY_ID = "SELECT * FROM reservations WHERE id = ?";
+//    private static final String SQL_UPDATE_TIME_SLOT = "UPDATE time_slots SET status = ? WHERE parking_spot_id = ? AND start_time BETWEEN ? AND ?";
+//    private static final String SQL_INSERT_TIME_SLOT = "INSERT INTO time_slots (parking_spot_id, start_time, end_time, status) VALUES (?, ?, ?, ?)";
+    private static final String SQL_INSERT_RESERVATION = "INSERT INTO reservations (parking_spot_id, user_id, start_time, end_time, penalty , cost) VALUES (?, ?, ?, ?, ?,?);";
     private static final String SQL_DELETE_RESERVATION = "DELETE FROM reservations WHERE id = ?;";
     private static final String SQL_UPDATE_RESERVATION = "UPDATE reservations SET parking_spot_id = ?, user_id = ?, start_time = ?, end_time = ?, penalty = ? WHERE id = ?;";
     private static final String SQL_GET_ALL_RESERVATIONS = "SELECT id, penalty, start_time, end_time, duration, user_id, parking_spot_id, transaction_id FROM reservations;";
     private static final String SQL_GET_USER_RESERVATIONS = "SELECT * FROM reservations WHERE user_id = ?;";
+    private static final String SQL_GET_VALID_RESERVATIONS = "SELECT * FROM reservations WHERE user_id = ? AND penalty =0;";
+
+    private static final String SQL_MARK_EXPIRED_RESERVATIONS = """
+    UPDATE reservations r
+    JOIN parking_spots ps ON r.parking_spot_id = ps.id
+    SET r.penalty = r.cost / 2
+    WHERE r.start_time < NOW() - INTERVAL 15 MINUTE
+      AND r.penalty = 0
+      AND ps.status = 'RESERVED';
+""";
     private static final String SQL_MARK_EXPIRED_RESERVATIONS = "UPDATE reservations \n" +
             "SET penalty = penalty + 50 \n" +
             "WHERE start_time < NOW() - INTERVAL 15 MINUTE AND penalty = 0;\n";
@@ -66,10 +77,11 @@ public class ReservationDao {
                 reservation.getUserId(),
                 reservation.getStartTime(),
                 reservation.getEndTime(),
-                reservation.getPenalty());
+                reservation.getPenalty(),
+                reservation.getCost());
 
         if (rowsAffected == 1) {
-            createTimeSlotsForReservation(reservation.getParkingSpotId(), reservation.getStartTime(), reservation.getEndTime(), "RESERVED");
+          //  createTimeSlotsForReservation(reservation.getParkingSpotId(), reservation.getStartTime(), reservation.getEndTime(), "RESERVED");
             return new ResponseMessageDto("Reservation created successfully", true, 200, null);
         } else {
             return new ResponseMessageDto("Error creating reservation", false, 500, null);
@@ -123,7 +135,25 @@ public class ReservationDao {
     }
 
     public List<ParkingSpots> getAvailableSpots(String startTime, String endTime, int lotId) {
-        return jdbcTemplate.query(SQL_GET_AVAILABLE_SPOTS, new Object[]{lotId, startTime, endTime}, new ParkingSpotRowMapper());
+        List<ParkingSpots> parkingSpots = jdbcTemplate.query(SQL_GET_AVAILABLE_SPOTS, new Object[]{lotId, startTime, endTime}, new ParkingSpotRowMapper());
+        final LocalTime peakStart = LocalTime.of(14, 0);
+        final LocalTime peakEnd = LocalTime.of(19, 0);
+        final LocalTime currentTime = LocalTime.now();
+        final LocalTime s =LocalTime.of(0, 0);
+        final LocalTime e =LocalTime.of(8, 0);
+        int price =0;
+        if (currentTime.isAfter(peakStart) && currentTime.isBefore(peakEnd)) {
+            price+=20;
+        }
+        else if(!(currentTime.isAfter(s) && currentTime.isBefore(e)))
+        {
+            price+=10;
+        }
+            for(ParkingSpots p : parkingSpots)
+        {
+            p.setPrice(p.getPrice()+price);
+        }
+        return  parkingSpots;
     }
 
     public List<Reservations> getUserReservations(int userId) {
@@ -132,7 +162,6 @@ public class ReservationDao {
 
     public ResponseMessageDto expireReservations() {
         int rowsAffected = jdbcTemplate.update(SQL_MARK_EXPIRED_RESERVATIONS);
-        int k=jdbcTemplate.update(SQL_UPDATE_PARKING_SPOTS_PENALTY);
         return new ResponseMessageDto(
                 rowsAffected > 0 ? "Expired reservations updated successfully" : "No reservations to expire",
                 rowsAffected > 0,
@@ -176,6 +205,12 @@ public class ReservationDao {
                 new ReservationRowMapper()
         );
     }
+
+    public List<Reservations> getValidReservations(int userId) {
+        return jdbcTemplate.query(SQL_GET_VALID_RESERVATIONS, new Object[]{userId}, new ReservationRowMapper());
+
+    }
+
     public class ReservationRowMapper implements RowMapper<Reservations> {
         @Override
         public Reservations mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -188,6 +223,7 @@ public class ReservationDao {
             reservation.setUserId(rs.getInt("user_id"));
             reservation.setParkingSpotId(rs.getInt("parking_spot_id"));
             reservation.setTransactionId(rs.getInt("transaction_id"));
+            reservation.setCost(rs.getInt("cost"));
             return reservation;
         }
     }

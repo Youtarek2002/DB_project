@@ -9,7 +9,7 @@ public class ReservationExpiryService {
     private final ReservationDao reservationDao;
     private final ParkingSpotDao parkingSpotDao;
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 1000)
     public void expireReservationsAutomatically() {
         reservationDao.expireReservations();
         System.out.println("Checked and expired reservations if necessary.");
