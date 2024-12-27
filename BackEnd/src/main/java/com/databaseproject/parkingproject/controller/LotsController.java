@@ -5,6 +5,7 @@ import com.databaseproject.parkingproject.dto.ResponseMessageDto;
 import com.databaseproject.parkingproject.entity.ParkingLots;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import com.databaseproject.parkingproject.entity.ParkingSpots;
 
 import java.util.List;
 
