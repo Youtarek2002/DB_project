@@ -7,7 +7,7 @@ import { LotComponent } from './components/general/lot/lot.component';
 export const routes: Routes = [
     {
         path:'',
-        redirectTo:'lots',
+        redirectTo:'login',
         pathMatch:'full'
     },
     {

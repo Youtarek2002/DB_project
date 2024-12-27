@@ -11,11 +11,11 @@ export class AuthenticationService {
 
   login(info:any):Observable<any>
   {
-    return this.http.post(Environment.url+'/login',info)
+    return this.http.post(Environment.url+'/authenticate/signin',info)
   }
   signup(info:any):Observable<any>
   {
     delete info.confirmpassword
-    return this.http.post(Environment.url+'/signup',info)
+    return this.http.post(Environment.url+'/authenticate/signup',info)
   }
 }

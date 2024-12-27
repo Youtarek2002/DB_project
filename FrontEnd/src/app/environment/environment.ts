@@ -1,3 +1,3 @@
 export enum Environment {
-    url = ''
+    url = 'localhost:8080/'
 }
