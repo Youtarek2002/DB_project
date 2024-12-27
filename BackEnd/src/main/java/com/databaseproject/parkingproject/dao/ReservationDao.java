@@ -129,26 +129,34 @@ public class ReservationDao {
         return jdbcTemplate.query(SQL_GET_ALL_RESERVATIONS, new ReservationRowMapper());
     }
 
-    public List<ParkingSpots> getAvailableSpots(String startTime, String endTime, int lotId) {
+    public Map<String, Object> getAvailableSpots(String startTime, String endTime, int lotId) {
         List<ParkingSpots> parkingSpots = jdbcTemplate.query(SQL_GET_AVAILABLE_SPOTS, new Object[]{lotId, startTime, endTime}, new ParkingSpotRowMapper());
         final LocalTime peakStart = LocalTime.of(14, 0);
         final LocalTime peakEnd = LocalTime.of(19, 0);
         final LocalTime currentTime = LocalTime.now();
-        final LocalTime s =LocalTime.of(0, 0);
-        final LocalTime e =LocalTime.of(8, 0);
-        int price =0;
+        final LocalTime s = LocalTime.of(0, 0);
+        final LocalTime e = LocalTime.of(8, 0);
+        int price = 0;
+
         if (currentTime.isAfter(peakStart) && currentTime.isBefore(peakEnd)) {
-            price+=20;
+            price += 20;
+        } else if (!(currentTime.isAfter(s) && currentTime.isBefore(e))) {
+            price += 10;
         }
-        else if(!(currentTime.isAfter(s) && currentTime.isBefore(e)))
-        {
-            price+=10;
+
+        for (ParkingSpots p : parkingSpots) {
+            p.setPrice(p.getPrice() + price);
         }
-            for(ParkingSpots p : parkingSpots)
-        {
-            p.setPrice(p.getPrice()+price);
-        }
-        return  parkingSpots;
+
+        Integer startIndex = jdbcTemplate.queryForObject(
+                "SELECT MIN(id) FROM parking_spots WHERE parking_lot_id = ?",
+                new Object[]{lotId}, Integer.class);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("spots", parkingSpots);
+        resultMap.put("startIndex", startIndex != null ? startIndex : 0);
+
+        return resultMap;
     }
 
     public List<Reservations> getUserReservations(int userId) {
