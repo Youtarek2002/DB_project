@@ -10,7 +10,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
+
+@Getter
+@Setter
 @SuperBuilder
 public class Users implements UserDetails{
 
@@ -24,6 +32,7 @@ public class Users implements UserDetails{
     private String paymentMethod;
     private Role role;
     private String licensePlate;
+    private int numberOfReservations;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -167,6 +176,7 @@ public class Users implements UserDetails{
                 ", paymentMethod='" + paymentMethod + '\'' +
                 ", role=" + role +
                 ", licensePlate='" + licensePlate + '\'' +
+                ", numberOfReservations=" + numberOfReservations +
                 '}';
     }
 }

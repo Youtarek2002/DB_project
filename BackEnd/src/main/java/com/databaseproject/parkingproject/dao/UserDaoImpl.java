@@ -1,16 +1,13 @@
 package com.databaseproject.parkingproject.dao;
 
 import com.databaseproject.parkingproject.config.JwtService;
-import com.databaseproject.parkingproject.dto.DriverDto;
 import com.databaseproject.parkingproject.dto.ResponseMessageDto;
 import com.databaseproject.parkingproject.dto.SigningDto;
 import com.databaseproject.parkingproject.entity.Users;
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
-
 import java.util.Map;
 
 @AllArgsConstructor
@@ -22,7 +19,7 @@ public class UserDaoImpl implements UserDao {
 
 
     @Override
-    public ResponseMessageDto addDriver(Users driver) {
+    public ResponseMessageDto addUser(Users driver) {
         String countQuery = "SELECT COUNT(*) FROM users WHERE email = ? OR username = ?";
         long count = jdbcTemplate.queryForObject(countQuery, Long.class, driver.getEmail(), driver.getUsername());
 

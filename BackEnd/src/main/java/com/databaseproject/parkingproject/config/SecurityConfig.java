@@ -29,9 +29,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/authenticate/**") // list of request that should be permitted
                         .permitAll()
+                        .requestMatchers("/api/authenticate/accept/**") // list of request that should be permitted
+                        .permitAll()
 
                         .requestMatchers("/api/v1/SuperAdmin/**") // list of request that should be permitted
                         .hasRole("SUPER_ADMIN")
+                        .requestMatchers("/ws/**").permitAll()
 
                         .anyRequest() // any other request should be authenticated
                         .authenticated()

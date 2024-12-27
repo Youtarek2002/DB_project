@@ -1,12 +1,11 @@
 package com.databaseproject.parkingproject.service;
 
 import com.databaseproject.parkingproject.dao.UserDao;
-import com.databaseproject.parkingproject.dto.DriverDto;
+import com.databaseproject.parkingproject.dto.UserDto;
 import com.databaseproject.parkingproject.dto.ResponseMessageDto;
 import com.databaseproject.parkingproject.dto.SigningDto;
 import com.databaseproject.parkingproject.entity.Users;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,7 +14,7 @@ public class UserServiceImpl implements UserService {
     private final UserDao userDao;
 
     @Override
-    public ResponseMessageDto addDriver(DriverDto driverDto) {
+    public ResponseMessageDto addUser(UserDto driverDto) {
         var driver= Users.builder()
                 .email(driverDto.getEmail())
                 .password(driverDto.getPassword())
@@ -27,7 +26,7 @@ public class UserServiceImpl implements UserService {
                 .paymentMethod(driverDto.getPaymentMethod())
                 .role(Users.Role.valueOf("DRIVER"))
                 .build();
-        return userDao.addDriver(driver);
+        return userDao.addUser(driver);
     }
 
     @Override

@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class DriverDto {
+public class UserDto {
     private String fname;
     private String lname;
     private String username;
