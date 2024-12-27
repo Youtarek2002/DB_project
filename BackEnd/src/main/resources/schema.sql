@@ -101,6 +101,29 @@ CREATE TABLE IF NOT EXISTS parking_spot_changes (
 # DROP TRIGGER IF EXISTS after_adding_reservations;
 # DROP TRIGGER IF EXISTS after_delete_reservations;
 # SHOW GRANTS FOR CURRENT_USER;
+# DROP EVENT IF EXISTS notify_users_before_end_reservation;
+
+# CREATE EVENT notify_users_before_end_reservation
+#     ON SCHEDULE EVERY 1 MINUTE
+#     DO
+#     BEGIN
+#         INSERT INTO notifications (time, message, user_id)
+#         SELECT
+#             NOW(),
+#             CONCAT('Your reservation for spot ', r.parking_spot_id, ' is about to end'),
+#             r.user_id
+#         FROM reservations r
+#         WHERE r.end_time <= NOW() + INTERVAL 5 MINUTE
+#           AND NOT EXISTS (
+#             SELECT 1
+#             FROM notifications n
+#             WHERE n.user_id = r.user_id
+#               AND n.message = CONCAT('Your reservation for spot ', r.parking_spot_id, ' is about to end')
+#         );
+#     END;
+
+
+
 
 create table IF NOT EXISTS time_slots(
  id int auto_increment primary key not null,
@@ -133,4 +156,9 @@ CREATE TABLE IF NOT EXISTS tokens (
     revoked BOOLEAN NOT NULL DEFAULT FALSE,
     user_id INT,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+INSERT INTO users (fname, lname, username, email, phone, password, role, license_plate)
+SELECT 'Admin', 'User', 'admin', 'admin@gmail.com', NULL, 'adminpassword', 'SYSTEM_ADMIN', NULL
+WHERE NOT EXISTS (
+    SELECT 1 FROM users WHERE username = 'admin' AND role = 'SYSTEM_ADMIN'
 );

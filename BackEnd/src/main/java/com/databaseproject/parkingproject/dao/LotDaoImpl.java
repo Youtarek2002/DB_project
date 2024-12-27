@@ -14,6 +14,8 @@ import com.databaseproject.parkingproject.entity.ParkingSpots;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Repository
@@ -78,6 +80,7 @@ public class LotDaoImpl {
 """;
 
 private static final String SQL_GET_LOT_SPOTS = "SELECT * FROM parking_spots WHERE parking_lot_id = ?";
+private static final String SQL_admin_notification="INSERT INTO notifications (time, message, user_id) VALUES (?,?,?)";
 
 
     private final JdbcTemplate jdbcTemplate;
@@ -92,6 +95,12 @@ private static final String SQL_GET_LOT_SPOTS = "SELECT * FROM parking_spots WHE
         if (lot.getEVCount() == null || lot.getRegularCount() == null || lot.getDisabledCount() == null) {
             return new ResponseMessageDto("All counts must be provided", false, 400, null);
         }
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedNow = now.format(formatter);
+        String adminMessage="Lot "+lot.getLocation()+" has been requested";
+// Execute the query
+        jdbcTemplate.update(SQL_admin_notification, formattedNow,adminMessage, 1);
 
         int rowsAffected = jdbcTemplate.update(SQL_INSERT_LOT,
                 lot.getDisabledCount(),
@@ -124,6 +133,9 @@ private static final String SQL_GET_LOT_SPOTS = "SELECT * FROM parking_spots WHE
 //    }
 public ResponseMessageDto admitLot(int id) {
     int rowsAffected = jdbcTemplate.update(SQL_ADMIT_LOT, id);
+    String location = jdbcTemplate.queryForObject("SELECT location FROM parking_lots WHERE id = ?", new Object[]{id}, String.class);
+    int managerId = jdbcTemplate.queryForObject("SELECT parking_lot_manager FROM parking_lots WHERE id = ?", new Object[]{id}, Integer.class);
+    jdbcTemplate.update(SQL_admin_notification, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),"Lot "+location+" has been approved",managerId);
 
     String message = (rowsAffected == 1) ? "Request has been sent" : "Error in sending the request";
     ParkingLots parkingLot = getParkingLot(id);

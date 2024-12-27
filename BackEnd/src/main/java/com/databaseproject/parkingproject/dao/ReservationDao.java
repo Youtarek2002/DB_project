@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Repository
@@ -58,6 +59,7 @@ public class ReservationDao {
                     "WHERE ps.parking_lot_id = ? AND r.end_time < NOW() AND penalty>0";
     private static final String SQL_GET_RESERVATIONS_BY_TIME =
             "SELECT * FROM reservations WHERE start_time <= ? AND end_time > ? AND penalty = 0";
+    private static final String SQL_user_notification="Insert into notifications (user_id,time , message) values (?,?,?)";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -69,7 +71,7 @@ public class ReservationDao {
         if (isSpotAlreadyBooked(reservation.getParkingSpotId(), reservation.getStartTime(), reservation.getEndTime())) {
             return new ResponseMessageDto("Parking spot already reserved for the selected time.", false, 400, null);
         }
-
+        jdbcTemplate.update(SQL_user_notification,reservation.getUserId(),LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),"Your reservation for spot number " + reservation.getParkingSpotId()+ " is confirmed");
         int rowsAffected = jdbcTemplate.update(SQL_INSERT_RESERVATION,
                 reservation.getParkingSpotId(),
                 reservation.getUserId(),
