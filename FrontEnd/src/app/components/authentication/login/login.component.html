@@ -2,16 +2,16 @@
     <div class="content">
         <form [formGroup]="loginForm" (ngSubmit)="login()">
             <h3>LOGIN</h3>
-
-            <!-- <p-floatLabel class="area">
+            <p-floatLabel class="area">
                 <input pInputText id="email" formControlName="email" />
                 <label for="email">Email</label>
-            </p-floatLabel> -->
+            </p-floatLabel>
 
-            <!-- <p-floatLabel class="area"> -->
-                <input pInputText type="password" id="password" formControlName="password" />
+            <p-floatlabel class="area">
+                <p-password formControlName="password" [toggleMask]="true" [feedback]="false"/>
                 <label for="password">Password</label>
-            <!-- </p-floatLabel>  -->
+            </p-floatlabel>
+            
 
             <button type="submit">LOGIN</button>
             <a routerLink="/signup">new here? Sign Up now</a>

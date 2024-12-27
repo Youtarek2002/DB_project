@@ -1,0 +1,87 @@
+<div class="main">    
+    <div class="lot-container">
+        <div class="info">
+            <div class="text">
+                <h3 class="lot-name">{{lot.name}}</h3>
+                <p class="lot-location">
+                    <i-lucide [img]="mapPinIcon" class="location-icon"></i-lucide>
+                    {{ lot.location }}
+                </p>
+
+                <div class="spot-type">
+                    <i-lucide [img]="carIcon" class="spot-icon regular"></i-lucide>
+                    <span class="spot-count">{{ lot.spots.regular }}</span>
+                    <span class="spot-label">Regular Spots</span>
+                </div>
+
+                <div class="spot-type">
+                    <i-lucide [img]="zapIcon" class="spot-icon ev"></i-lucide>
+                    <span class="spot-count">{{ lot.spots.ev }}</span>
+                    <span class="spot-label"> EV Spots</span>
+                </div>
+
+                <div class="spot-type">
+                    <i-lucide [img]="wheelChairIcon" class="spot-icon disabled"></i-lucide>
+                    <span class="spot-count">{{ lot.spots.disabled }}</span>
+                    <span class="spot-label">Disabled Spots</span>
+                </div>
+
+                
+            </div>
+            <div class="map">
+                <google-map 
+                width="100%"
+                [center]="center"
+                [zoom]="18"
+                (mapClick)="moveMap($event)"
+                (mapMousemove)="move($event)"
+                >
+                <map-marker [position]="center"></map-marker>
+            </google-map>
+            <button (click)="startNavigation()">Start Navigation</button>
+
+        </div>
+        </div>
+        <div class="spots-grid">
+            <div class="spot-typee">
+                <i-lucide [img]="carIcon" class="image regular"></i-lucide>
+                 Regular Spots 
+            </div>    
+            
+            <div class="spot-typee">
+                <i-lucide [img]="zapIcon" class="image ev"></i-lucide>
+                 EV Spots 
+            </div> 
+
+            <div class="spot-typee">
+                <i-lucide [img]="wheelChairIcon" class="image disabled"></i-lucide>
+                 Disabled Spots 
+            </div> 
+            
+            
+
+
+
+          
+
+            <div class="spot-grid">
+                <div class="text" *ngFor="let spot of regularSpots; let i = index" [ngStyle]="{'background-color': spot.status === 'occupied' ? 'red' : 'green'}">
+                    <span>{{ i+1 }}</span>
+                </div>
+            </div>
+            <div class="spot-grid">
+                <div class="text" *ngFor="let spot of evSpots; let i = index" [ngStyle]="{'background-color': spot.status === 'occupied' ? 'red' : 'green'}">
+                    <span>{{ i+1 }}</span>
+                </div>
+            </div>
+            <div class="spot-grid">
+                <div class="text" *ngFor="let spot of disabledSpots let i = index" [ngStyle]="{'background-color': spot.status === 'occupied' ? 'red' : 'green'}">
+                    <span>{{ i+1 }}</span>
+                </div>
+            </div>
+          </div>
+
+        
+    </div>
+
+</div>

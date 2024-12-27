@@ -6,12 +6,13 @@ import { DialogModule } from 'primeng/dialog';
 import {ButtonModule} from 'primeng/button'
 import { Router, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { jwtDecode } from "jwt-decode";
-import { AuthenticationService } from '../../../services/authentication/authentication.service';
+import { AuthenticationService } from '../../../service/authentication/authentication.service';
+import { PasswordModule } from 'primeng/password';
+// import { AuthenticationService } from '../../../services/authentication/authentication.service';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
-  imports: [ FormsModule, ReactiveFormsModule,FloatLabelModule,ButtonModule,RouterModule,RouterLink,InputTextModule,DialogModule],
+  imports: [FormsModule, ReactiveFormsModule, FloatLabelModule, ButtonModule, RouterModule, RouterLink, InputTextModule, DialogModule,PasswordModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -63,13 +64,4 @@ export class LoginComponent {
 
     )
   }
-
-
-
-
-
-
-
-
-
 }

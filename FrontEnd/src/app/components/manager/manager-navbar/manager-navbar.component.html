@@ -1,0 +1,38 @@
+<nav class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-content">
+        <div class="navbar-brand">
+          <i-lucide [img]="CarIcon" class="brand-icon"></i-lucide>
+          <span class="brand-name">ParkPal</span>
+        </div>
+        
+        
+        <!-- Desktop Navigation -->
+        <div class="nav-links">
+          <button *ngFor="let item of navItems"
+                  [routerLink]="item.route"
+                  routerLinkActive="active"
+                  class="nav-button">
+            <i-lucide [name]="item.icon"></i-lucide>
+            <span>{{item.label}}</span>
+          </button>
+        </div>
+  
+        <!-- Mobile menu button -->
+        <button class="mobile-menu-button" (click)="toggleMobileMenu()">
+          <i-lucide name="menu"></i-lucide>
+        </button>
+      </div>
+    </div>
+  
+    <!-- Mobile Navigation -->
+    <div class="mobile-menu" [class.open]="isMobileMenuOpen">
+      <button *ngFor="let item of navItems"
+              [routerLink]="item.route"
+              routerLinkActive="active"
+              class="mobile-nav-button">
+        <i-lucide [name]="item.icon"></i-lucide>
+        <span>{{item.label}}</span>
+      </button>
+    </div>
+  </nav>

@@ -1,1 +1,185 @@
-<p>signup works!</p>
+<div class="main">
+    <div class="content">
+        <form [formGroup]="signupForm" (ngSubmit)="signup()">
+            <h3>SIGN UP</h3>
+            <div class="scrollable-content">
+                <div class="grid-container">
+                    <input class="area" pInputText id="username" formControlName="username" placeholder="UserName" />
+                    <div 
+                    style="height: 0.02em;" 
+                    *ngIf="  
+                    (signupForm.get('username')?.dirty || signupForm.get('username')?.touched)">
+                    <span class="text-danger"
+                    *ngIf="getErrorMessage(signupForm.get('username'))">
+                    {{getErrorMessage(signupForm.get('username'))}}
+                </span>
+                     </div>
+                </div>
+            <div class="horizontal">
+                <div class="grid-container">
+                    <input class="area" pInputText id="firstName" formControlName="fname" placeholder="First Name"/>
+                    <div 
+                    style="height: 0.02em;" 
+                    *ngIf="  
+                (signupForm.get('fname')?.dirty || signupForm.get('fname')?.touched)">
+                <span class="text-danger"
+                *ngIf="getErrorMessage(signupForm.get('fname'))">
+                {{getErrorMessage(signupForm.get('fname'))}}
+                </span>
+                    </div>
+                </div>
+                   
+                <div class="grid-container">
+                    <input class="area"pInputText id="lastName" formControlName="lname" placeholder="Last Name"/>
+                    
+                    <div 
+                    style="height: 0.02em; "
+                    *ngIf="  
+                        (signupForm.get('lname')?.dirty || signupForm.get('lname')?.touched)">
+                        <span class="text-danger"
+                        *ngIf="getErrorMessage(signupForm.get('lname'))">
+                        {{getErrorMessage(signupForm.get('lname'))}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="horizontal"> 
+
+                <div class="grid-container">
+                    
+                    <input class="area" pInputText id="email" formControlName="email" placeholder="Email" />
+                    <div 
+                    style="height: 0.02em;" 
+                    *ngIf="  
+                    (signupForm.get('email')?.dirty || signupForm.get('email')?.touched)">
+                    <span class="text-danger"
+                    *ngIf="getErrorMessage(signupForm.get('email'))">
+                    {{getErrorMessage(signupForm.get('email'))}}
+                </span>
+            </div>
+        </div>
+        
+        <div class="grid-container">
+            <input class="area" pInputText id="phoneNumber" formControlName="phone" placeholder="Phone Number" />
+            <div 
+            style="height: 0.02em;" 
+            *ngIf="  
+            (signupForm.get('phone')?.dirty || signupForm.get('phone')?.touched)">
+            <span class="text-danger2"
+            *ngIf="getErrorMessage(signupForm.get('phone'))">
+            {{getErrorMessage(signupForm.get('phone'))}}
+        </span>
+    </div>
+</div>
+
+</div>
+
+
+
+
+            <div class="horizontal"> 
+
+                <div class="grid-container">
+                    
+                    <input class="area" pInputText id="licence" formControlName="licencePlate" placeholder="Licence Number" />
+                    <div 
+                    style="height: 0.02em;" 
+                    *ngIf="  
+                    (signupForm.get('licencePlate')?.dirty || signupForm.get('licencePlate')?.touched)">
+                    <span class="text-danger"
+                    *ngIf="getErrorMessage(signupForm.get('licencePlate'))">
+                    {{getErrorMessage(signupForm.get('licencePlate'))}}
+                </span>
+            </div>
+            </div>
+
+            <div class="grid-container">
+            <input class="area" pInputText id="payment" formControlName="paymentMethod" placeholder="Payment Method" />
+            <div 
+            style="height: 0.02em;" 
+            *ngIf="  
+            (signupForm.get('paymentMethod')?.dirty || signupForm.get('paymentMethod')?.touched)">
+            <span class="text-danger2"
+            *ngIf="getErrorMessage(signupForm.get('paymentMethod'))">
+            {{getErrorMessage(signupForm.get('paymentMethod'))}}
+            </span>
+            </div>
+            </div>
+
+            </div>
+
+
+
+
+
+
+
+            
+            
+               
+
+
+
+        
+                <div class="grid-container">
+
+                    <input class="area" pInputText type="password" id="password" formControlName="password" placeholder="Password"/>
+                    <div *ngIf=" 
+                    (signupForm.get('password')?.dirty || signupForm.get('password')?.touched)">
+                    <span class="text-danger"
+                    *ngIf="getErrorMessage(signupForm.get('password'))">
+                    {{getErrorMessage(signupForm.get('password'))}}
+                </span>
+                <span class="text-danger"
+                *ngIf="signupForm.errors?.['notvalid'] && !signupForm.get('password')?.errors ">
+                {{errorr}}
+                        </span>
+                    </div>
+                </div>
+
+
+
+
+                <div class="grid-container">
+
+                    <input class="area" pInputText id="confrimpassword" type="password" formControlName="confirmpassword" placeholder="Confirm Password" />
+                    
+                    <div *ngIf=" 
+                    (signupForm.get('confirmpassword')?.dirty || signupForm.get('confirmpassword')?.touched)">
+                    <span class="text-danger"
+                    *ngIf="getErrorMessage(signupForm.get('confirmpassword'))">
+                    {{getErrorMessage(signupForm.get('confirmpassword'))}}
+                </span>
+                <span class="text-danger"
+                *ngIf="signupForm.errors?.['mismatch'] && !signupForm.get('confirmpassword')?.errors?.['required'] ">
+                Passwords don't match
+            </span>
+        </div>
+    </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+            <button  type="submit">SIGNUP</button>
+            <a routerLink="/login">Already have an account? Login Here</a>
+              <div class="divider">OR</div>
+              <button *ngIf="!isUserSignup" type="button" (click)="usersignup()" class="google-button">
+                Sign Up as a User
+              </button>
+              <button *ngIf="!isManagerSignup" type="button" (click)="managersignup()" class="google-button">
+                Sign Up as a Manager
+              </button>
+              
+              
+        </form>
+    </div>
+</div>

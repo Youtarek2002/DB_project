@@ -1,0 +1,155 @@
+.main
+{
+    display: flex;
+    flex-direction: column;
+    background-color: blue;
+    gap: 10px;
+    padding: 10px 20px;
+}
+
+.lot-container
+{
+    display: flex;
+    margin-top: 10px;
+    background-color: rgb(227, 247, 7);
+    height: 929px;
+    // align-items: center;
+    padding: 20px 50px;
+    border-radius: 10px;
+    gap: 20px;
+    flex-direction: column;
+}
+.info{
+    display: flex;
+    flex-direction: row;
+    
+    .text{
+        width:25%;
+        display: flex;
+    margin-top: 10px;
+    background-color: rgb(227, 247, 7);
+    // height: 929px;
+    // align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+    gap: 20px;
+    flex-direction: column;
+    }
+    .map{
+        width: 100%; /* Make the map container take the full width of its parent */
+    display: flex;
+    flex: 1;
+    position: relative;
+    }
+    
+
+}
+.lot-content {
+    padding: 1.5rem;
+  }
+  
+  .lot-name {
+    font-size: 3.25rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+  }
+  
+  .lot-location {
+    // align-items: center;
+    align-content: center;
+    display: flex;
+    align-items: center;
+    color:black;
+    font-size: 3.25rem;
+    // margin-bottom: 1.5rem;
+  
+    .location-icon {
+    color: black;
+      width: 1rem;
+      height: 4rem;
+      margin-right: 1.5rem;
+      scale: 2;
+    }
+  }
+
+  .spot-type {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    font-size: 3rem;
+    color: black
+  }
+  
+  .spot-icon {
+    width: 1rem;
+    height: 4rem;
+    margin-right: 1.5rem;
+    scale:2;
+    &.ev { color: #059669; }
+    &.disabled { color: #2563eb; }
+    &.regular { color: #6b7280; }
+  }
+  
+
+  google-map {
+    display: block;
+    position: relative;
+    width: 100%; /* Full width of the parent */
+    height: 100%; /* Adjust height as needed */
+    margin: 0; 
+  }
+
+  .spots-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    gap: 2rem;
+    padding: 1rem;
+    background-color: black;
+    text-align: center;
+    height: 420px;
+    p{
+      color: white;
+      font-size: 30px;
+      
+    }
+  }
+  
+  .spot-grid {
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 1rem;
+    background-color: white;
+    grid-auto-rows: 50px; /* Set a fixed height for each row */
+    font-size: 25px;
+    text-align: center;
+    .text
+    {
+      align-content: center;
+    }
+  }
+
+  .spot-typee {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    // gap: 10px;
+    font-size: 35px;
+    color: white
+  }
+
+  .image
+    {
+        width: 1rem;
+      height: 2.5rem;
+      margin-right: 2rem;
+      scale: 2;
+      &.ev { color: #059669; }
+      &.disabled { color: #2563eb; }
+      &.regular { color: #6b7280; }
+    }
