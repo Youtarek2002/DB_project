@@ -1,5 +1,6 @@
 package com.databaseproject.parkingproject.dao;
 
+import com.databaseproject.parkingproject.dto.ReservationDto;
 import com.databaseproject.parkingproject.dto.ResponseMessageDto;
 import com.databaseproject.parkingproject.entity.ParkingSpots;
 import com.databaseproject.parkingproject.entity.Reservations;
@@ -13,7 +14,9 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class ReservationDao {
@@ -24,7 +27,12 @@ public class ReservationDao {
     private static final String SQL_DELETE_RESERVATION = "DELETE FROM reservations WHERE id = ?;";
     private static final String SQL_UPDATE_RESERVATION = "UPDATE reservations SET parking_spot_id = ?, user_id = ?, start_time = ?, end_time = ?, penalty = ? WHERE id = ?;";
     private static final String SQL_GET_ALL_RESERVATIONS = "SELECT id, penalty, start_time, end_time, duration, user_id, parking_spot_id, transaction_id FROM reservations;";
-    private static final String SQL_GET_USER_RESERVATIONS = "SELECT * FROM reservations WHERE user_id = ?;";
+    private static final String SQL_GET_USER_RESERVATIONS =
+            "SELECT pl.location, pl.longitude, pl.latitude , r.*" +
+                    "FROM reservations r " +
+                    "JOIN parking_spots ps ON r.parking_spot_id = ps.id " +
+                    "JOIN parking_lots pl ON ps.parking_lot_id = pl.id " +
+                    "WHERE r.user_id = ?";
     private static final String SQL_GET_VALID_RESERVATIONS = "SELECT * FROM reservations WHERE user_id = ? AND penalty =0;";
 
     private static final String SQL_MARK_EXPIRED_RESERVATIONS = """
@@ -159,9 +167,16 @@ public class ReservationDao {
         return resultMap;
     }
 
-    public List<Reservations> getUserReservations(int userId) {
-        return jdbcTemplate.query(SQL_GET_USER_RESERVATIONS, new Object[]{userId}, new ReservationRowMapper());
-    }
+    public List<ReservationDto> getUserReservations(int userId) {
+        return jdbcTemplate.query(SQL_GET_USER_RESERVATIONS, new Object[]{userId}, (rs, rowNum) -> {
+            ReservationDto reservation = new ReservationDto();
+            reservation.setLocation(rs.getString("location"));
+            reservation.setLongitude(rs.getDouble("longitude"));
+            reservation.setLatitude(rs.getDouble("latitude"));
+            reservation.setReservation(new ReservationRowMapper().mapRow(rs, rowNum));
+            return reservation;
+        });
+}
 
     public ResponseMessageDto expireReservations() {
         int rowsAffected = jdbcTemplate.update(SQL_MARK_EXPIRED_RESERVATIONS);

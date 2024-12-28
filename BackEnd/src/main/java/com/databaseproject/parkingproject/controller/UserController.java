@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-
     @PostMapping("/api/authenticate/signup")
     public ResponseMessageDto addUser(@RequestBody UserDto driverDto) {
         return userService.addUser(driverDto);
@@ -22,5 +21,8 @@ public class UserController {
     public ResponseMessageDto signIn(@RequestBody SigningDto signingDto) {
         return userService.signIn(signingDto);
     }
-
+    @PostMapping("/api/authenticate/managerSignup")
+    public ResponseMessageDto addManager(@RequestBody UserDto driverDto) {
+        return userService.addManager(driverDto);
+    }
 }

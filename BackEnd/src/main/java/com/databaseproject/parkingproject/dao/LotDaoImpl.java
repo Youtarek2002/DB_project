@@ -198,6 +198,9 @@ public ResponseMessageDto admitLot(int id) {
     public List<ParkingSpots> getLotSpots(int lotId) {
             return jdbcTemplate.query(SQL_GET_LOT_SPOTS, new Object[]{lotId}, new ParkingSpotRowMapper());
         }
+    public List<ParkingLots> getAllLots() {
+        return jdbcTemplate.query("SELECT * FROM parking_lots", new ParkingLotsRowMapper());
+}
 
     public static class ParkingLotsRowMapper implements RowMapper<ParkingLots> {
         @Override

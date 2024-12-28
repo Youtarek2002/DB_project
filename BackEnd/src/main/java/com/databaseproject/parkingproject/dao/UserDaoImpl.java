@@ -100,7 +100,8 @@ public class UserDaoImpl implements UserDao {
                 "lastName", user.getLname(),
                 "email", user.getEmail(),
                 "phone", user.getPhone(),
-                "licensePlate", user.getLicensePlate()
+                "licensePlate", user.getLicensePlate(),
+                "id",user.getId()
         );
 
         var jwtToken=jwtService.generateToken(extraClaims,user);

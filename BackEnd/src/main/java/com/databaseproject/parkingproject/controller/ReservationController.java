@@ -1,6 +1,7 @@
 package com.databaseproject.parkingproject.controller;
 
 import com.databaseproject.parkingproject.dao.ReservationDao;
+import com.databaseproject.parkingproject.dto.ReservationDto;
 import com.databaseproject.parkingproject.dto.ResponseMessageDto;
 import com.databaseproject.parkingproject.entity.ParkingSpots;
 import com.databaseproject.parkingproject.entity.Reservations;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/authenticate/reservations")
@@ -56,9 +58,9 @@ public class ReservationController {
 
 
     @GetMapping("/user-reservations")
-    public List<Reservations> getUserReservations(@RequestParam int userId) {
+    public List<ReservationDto> getUserReservations(@RequestParam int userId) {
         return reservationDao.getUserReservations(userId);
-    }
+}
     @GetMapping("/valid")
     public List<Reservations> getValidReservations(@RequestParam int userId) {
         return reservationDao.getValidReservations(userId);

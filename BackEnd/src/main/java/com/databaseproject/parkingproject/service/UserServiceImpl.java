@@ -29,6 +29,21 @@ public class UserServiceImpl implements UserService {
         return userDao.addUser(driver);
     }
 
+    public ResponseMessageDto addManager(UserDto driverDto) {
+        var driver= Users.builder()
+                .email(driverDto.getEmail())
+                .password(driverDto.getPassword())
+                .fname(driverDto.getFname())
+                .lname(driverDto.getLname())
+                .username(driverDto.getUsername())
+                .phone(driverDto.getPhone())
+                .licensePlate(driverDto.getLicensePlate())
+                .paymentMethod(driverDto.getPaymentMethod())
+                .role(Users.Role.valueOf("PARKING_LOT_MANAGER"))
+                .build();
+        return userDao.addUser(driver);
+            }
+
     @Override
     public ResponseMessageDto signIn(SigningDto signingDto) {
         return userDao.signIn(signingDto);

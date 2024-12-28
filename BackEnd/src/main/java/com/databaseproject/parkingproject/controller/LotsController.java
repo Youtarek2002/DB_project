@@ -60,4 +60,9 @@ public class LotsController {
             return lotList.toArray(new ParkingSpots[0]);
         }
 
+    @GetMapping("/getAllLots")
+    public List<ParkingLots> getAllLots() {
+        return lotDao.getAllLots();
+    }
+
 }

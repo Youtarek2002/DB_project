@@ -7,4 +7,5 @@ import com.databaseproject.parkingproject.dto.SigningDto;
 public interface UserService {
     public ResponseMessageDto addUser(UserDto driverDto);
     public ResponseMessageDto signIn(SigningDto signingDto);
+    public ResponseMessageDto addManager(UserDto driverDto);
 }
