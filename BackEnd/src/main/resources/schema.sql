@@ -65,62 +65,65 @@ CREATE TABLE IF NOT EXISTS parking_spot_changes (
     FOREIGN KEY (parking_spot_id) REFERENCES parking_spots(id) ON DELETE CASCADE
 );
 
-# CREATE TRIGGER after_update_parking_spots
-#     AFTER UPDATE ON parking_spots
-#     FOR EACH ROW
-# BEGIN
-#     INSERT INTO parking_spot_changes (parking_spot_id, old_status, new_status)
-#     VALUES (OLD.id, OLD.status, NEW.status);
-# END;
-#
-# CREATE TRIGGER after_adding_reservations
-#     AFTER INSERT ON reservations
-#     FOR EACH ROW
-# BEGIN
-#     DECLARE spot_price DECIMAL(10, 2);
-#     SELECT price INTO spot_price FROM parking_spots WHERE id = NEW.parking_spot_id;
-#     UPDATE users SET number_of_reservations = number_of_reservations + 1 WHERE id = NEW.user_id;
-#     UPDATE parking_lots
-#     SET revenue = revenue + spot_price
-#     WHERE id = (SELECT parking_lot_id FROM parking_spots WHERE id = NEW.parking_spot_id);
-#     UPDATE parking_spots
-#     SET revenue = revenue + spot_price
-#     WHERE id = NEW.parking_spot_id;
-#     if New.start_time<=now() then
-#         UPDATE parking_spots SET status = 'RESERVED'  WHERE id = NEW.parking_spot_id;
-#     end if;
-# end;
-# CREATE TRIGGER after_delete_reservations
-#     AFTER DELETE ON reservations
-#     FOR EACH ROW
-# BEGIN
-#     UPDATE parking_spots SET status = 'AVAILABLE' WHERE id = OLD.parking_spot_id;
-# end;
-
+-- CREATE TRIGGER after_update_parking_spots
+--     AFTER UPDATE ON parking_spots
+--     FOR EACH ROW
+-- BEGIN
+--     INSERT INTO parking_spot_changes (parking_spot_id, old_status, new_status)
+--     VALUES (OLD.id, OLD.status, NEW.status);
+-- END;
+--
+-- CREATE TRIGGER after_adding_reservations
+--     AFTER INSERT ON reservations
+--     FOR EACH ROW
+-- BEGIN
+--     DECLARE spot_price DECIMAL(10, 2);
+--     SELECT price INTO spot_price FROM parking_spots WHERE id = NEW.parking_spot_id;
+--     UPDATE users SET number_of_reservations = number_of_reservations + 1 WHERE id = NEW.user_id;
+--     UPDATE parking_lots
+--     SET revenue = revenue + spot_price
+--     WHERE id = (SELECT parking_lot_id FROM parking_spots WHERE id = NEW.parking_spot_id);
+--     UPDATE parking_spots
+--     SET revenue = revenue + spot_price
+--     WHERE id = NEW.parking_spot_id;
+--     if New.start_time<=now() then
+--         UPDATE parking_spots SET status = 'RESERVED'  WHERE id = NEW.parking_spot_id;
+--     end if;
+-- end;
+-- CREATE TRIGGER after_delete_reservations
+--     AFTER DELETE ON reservations
+--     FOR EACH ROW
+-- BEGIN
+--     UPDATE parking_spots SET status = 'AVAILABLE' WHERE id = OLD.parking_spot_id;
+-- end;
+--create index idx_status on parking_spots(status);
+--create index idx_admit on parking_lots(admitted);
+--create index idx_penalty on reservations(penalty);
+--create index idx_price on parking_spots(price);
 # DROP TRIGGER IF EXISTS after_update_parking_spots;
 # DROP TRIGGER IF EXISTS after_adding_reservations;
 # DROP TRIGGER IF EXISTS after_delete_reservations;
 # SHOW GRANTS FOR CURRENT_USER;
 # DROP EVENT IF EXISTS notify_users_before_end_reservation;
-
-# CREATE EVENT notify_users_before_end_reservation
-#     ON SCHEDULE EVERY 1 MINUTE
-#     DO
-#     BEGIN
-#         INSERT INTO notifications (time, message, user_id)
-#         SELECT
-#             NOW(),
-#             CONCAT('Your reservation for spot ', r.parking_spot_id, ' is about to end'),
-#             r.user_id
-#         FROM reservations r
-#         WHERE r.end_time <= NOW() + INTERVAL 5 MINUTE
-#           AND NOT EXISTS (
-#             SELECT 1
-#             FROM notifications n
-#             WHERE n.user_id = r.user_id
-#               AND n.message = CONCAT('Your reservation for spot ', r.parking_spot_id, ' is about to end')
-#         );
-#     END;
+--
+-- CREATE EVENT notify_users_before_end_reservation
+--     ON SCHEDULE EVERY 1 MINUTE
+--     DO
+--     BEGIN
+--         INSERT INTO notifications (time, message, user_id)
+--         SELECT
+--             NOW(),
+--             CONCAT('Your reservation for spot ', r.parking_spot_id, ' is about to end'),
+--             r.user_id
+--         FROM reservations r
+--         WHERE r.end_time <= NOW() + INTERVAL 5 MINUTE
+--           AND NOT EXISTS (
+--             SELECT 1
+--             FROM notifications n
+--             WHERE n.user_id = r.user_id
+--               AND n.message = CONCAT('Your reservation for spot ', r.parking_spot_id, ' is about to end')
+--         );
+--     END;
 
 
 
@@ -158,7 +161,7 @@ CREATE TABLE IF NOT EXISTS tokens (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 INSERT INTO users (fname, lname, username, email, phone, password, role, license_plate)
-SELECT 'Admin', 'User', 'admin', 'admin@gmail.com', NULL, 'adminpassword', 'SYSTEM_ADMIN', NULL
+SELECT 'Admin', 'User', 'admin', 'admin@gmail.com', '01028883551', 'adminpassword', 'SYSTEM_ADMIN', '1234'
 WHERE NOT EXISTS (
     SELECT 1 FROM users WHERE username = 'admin' AND role = 'SYSTEM_ADMIN'
 );

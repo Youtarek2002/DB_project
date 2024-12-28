@@ -70,7 +70,7 @@ public class ReportController {
             // Set headers and return the PDF content
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, "application/pdf");
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=reportManager.pdf");
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=reportManager.pdf");
 
             return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
         } catch (IOException e) {
