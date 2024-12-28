@@ -59,10 +59,28 @@ export class SignupComponent {
   { 
     if(this.isManagerSignup)
     {
-      console.log('here')
-      this.router.navigate(['/managersignup'],
-      {state:{data: this.signupForm.value}}
+      if(this.signupForm.valid)
+      {
+      this.auth.managersignup(this.signupForm.value).subscribe(
+        response=>{
+          if(response.success)
+          {
+            alert(response.message)
+            this.router.navigate(['/login'])
+  
+          }
+          else
+          {
+            alert(response.message)
+          }
+  
+        },
+        error=>{
+          console.log(error)
+        }
+        
       )
+    }
     }
     else{
     if(this.signupForm.valid)

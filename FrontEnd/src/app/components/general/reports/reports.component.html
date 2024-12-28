@@ -1,0 +1,60 @@
+<div class="main">
+
+    
+    <!-- <div class="search-container">
+        <p-iconfield>
+            <p-inputicon styleClass="pi pi-search" />
+            <input type="text" pInputText placeholder="Search" />
+        </p-iconfield>
+    </div> -->
+    
+    <div class="lots-container">
+        <!-- <button class="reserve-button">
+            Reserve Spot
+            <i-lucide [img]="arrowIcon" class="arrow-icon"></i-lucide>
+        </button> -->
+        <!-- <input pInputText id="email" formControlName="email"/> -->
+        <div class="scrollable">
+
+            <div class="lot-card" *ngFor="let lot of toview">
+                <div class="lot-content">
+                    <!-- <h3 class="lot-name">{{ lot.name }}</h3> -->
+                    <p class="lot-location">
+                        <i-lucide [img]="mapPinIcon" class="location-icon"></i-lucide>
+                        {{ lot.location }}
+                    </p>
+                    <div class="spots-grid">
+                    <div class="spot-type">
+                        <i-lucide [img]="zapIcon" class="spot-icon ev"></i-lucide>
+                        <span class="spot-count">{{ lot.EV_count }}</span>
+                        <span class="spot-label">EV Spots</span>
+                    </div>
+                    <div class="spot-type">
+                        <i-lucide [img]="wheelChairIcon" class="spot-icon disabled"></i-lucide>
+                        <span class="spot-count">{{ lot.disabled_count }}</span>
+                        <span class="spot-label">Disabled Spots</span>
+                    </div>
+                    <div class="spot-type">
+                        <i-lucide [img]="carIcon" class="spot-icon regular"></i-lucide>
+                        <span class="spot-count">{{ lot.regular_count }}</span>
+                        <span class="spot-label">Regular Spots</span>
+                    </div>
+                </div>
+                <button *ngIf="managerid" (click)="generatereport(lot)" class="reserve-button">
+                    Generate Report
+                    <i-lucide [img]="arrowIcon" class="arrow-icon"></i-lucide>
+                </button>
+                <button *ngIf="adminid" (click)="generateadminreport()" class="reserve-button">
+                    Generate Report
+                    <i-lucide [img]="arrowIcon" class="arrow-icon"></i-lucide>
+                </button>
+            </div>
+        </div>
+        </div>
+        <div class="paginator-container">
+        <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows" [totalRecords]="lots?.length" [rowsPerPageOptions]="[5, 10]" />
+        </div>
+</div>
+
+</div>
+<router-outlet></router-outlet>

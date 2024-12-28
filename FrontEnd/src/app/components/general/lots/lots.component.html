@@ -9,6 +9,14 @@
     </div> -->
     
     <div class="lots-container">
+        <button *ngIf="!adminid" (click)="togglemap()" class="reserve-button">
+            Search by Location
+            <i-lucide [img]="arrowIcon" class="arrow-icon"></i-lucide>
+        </button>
+        <button *ngIf="managerid" (click)="togglemodal()" class="reserve-button">
+            Add Lot
+            <i-lucide [img]="arrowIcon" class="arrow-icon"></i-lucide>
+        </button>
         <!-- <button class="reserve-button">
             Reserve Spot
             <i-lucide [img]="arrowIcon" class="arrow-icon"></i-lucide>
@@ -40,17 +48,109 @@
                         <span class="spot-label">Regular Spots</span>
                     </div>
                 </div>
-                <button (click)="routetolot(lot)" class="reserve-button">
-                    Reserve Spot
+                <button *ngIf="!managerid && !adminid" (click)="routetolot(lot)" class="reserve-button">
+                    Reserve a Spot
+                    <i-lucide [img]="arrowIcon" class="arrow-icon"></i-lucide>
+                </button>
+                <button *ngIf="adminid" (click)="admitlot(lot)" class="reserve-button green">
+                    Accept
+                    <i-lucide [img]="arrowIcon" class="arrow-icon"></i-lucide>
+                </button>
+                <button *ngIf="adminid" (click)="denylot(lot)" class="reserve-button red">
+                    Deny
+                    <i-lucide [img]="arrowIcon" class="arrow-icon"></i-lucide>
+                </button>
+
+                <button *ngIf="managerid" (click)="deletelot(lot)" class="reserve-button">
+                    Delete Lot
                     <i-lucide [img]="arrowIcon" class="arrow-icon"></i-lucide>
                 </button>
             </div>
         </div>
         </div>
         <div class="paginator-container">
-        <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows" [totalRecords]="lots.length" [rowsPerPageOptions]="[5, 10]" />
+        <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows" [totalRecords]="lots?.length" [rowsPerPageOptions]="[5, 10]" />
         </div>
 </div>
 
 </div>
+
+<p-dialog header="Add Lot"[dismissableMask]="false" [modal]="true" [(visible)]="showmodal" [style]="{  width: '45rem' }">
+    <div id="content2" class="content2">
+      <form class="formstyle" [formGroup]="lotForm" (ngSubmit)="addlot(lotForm)">
+            <input pInputText id="location" formControlName="location" placeholder="location"/>
+            <div class="horizontal">
+                <input pInputText id="regular_count" formControlName="regular_count" placeholder="Regular Spots Count" />
+                <input pInputText id="regular_price" formControlName="regular_price" placeholder="Regular Spots Price" />
+            </div>
+            <div class="horizontal">
+
+            <input pInputText id="disabled_count" formControlName="disabled_count" placeholder="Disabled Spots Count"/>
+            <input pInputText id="disabled_price" formControlName="disabled_price" placeholder="Disabled Spots Price"/>
+            </div>
+            <div class="horizontal">
+
+            <input pInputText id="EV_count" formControlName="EV_count" placeholder="EV Spots Count"/>
+            <input pInputText id="EV_price" formControlName="EV_price" placeholder="Ev Spots Price"/>
+            </div>
+            <input
+            id="pac-input1"
+            class="controls"
+            type="text"
+            placeholder="Search For Location"
+            (keydown)="preventEnter($event)"
+            style="padding: 10px;"
+            />
+
+                <google-map 
+                width="100%"
+                [center]="center1"
+                [zoom]="18"
+                (mapClick)="moveMap($event)"
+                (mapMousemove)="move($event)"
+                >
+                <map-marker [position]="center1"></map-marker>
+            </google-map>
+
+   
+  
+    <button class="reserve-button" type="submit">Add Lot</button> 
+    </form>
+  </div>
+    </p-dialog>
+
+
+
+
+
+    <p-dialog header="Search by Location"[dismissableMask]="false" [modal]="true" [(visible)]="showmap" [style]="{  width: '45rem' }">
+        <div id="content2" class="content2">
+                <input
+                id="pac-input2"
+                class="controls"
+                type="text"
+                placeholder="Search For Location"
+                (keydown)="preventEnter($event)"
+                style="padding: 10px;"
+                />
+    
+                    <google-map 
+                    #map2
+                    width="100%"
+                    [center]="center2"
+                    [zoom]="18"
+                    (mapClick)="moveMap($event)"
+                    (mapMousemove)="move($event)"
+                    >
+                    <map-marker [position]="center2"></map-marker>
+                </google-map>
+    
+       
+      
+        <button class="reserve-button" (click)="search()">Search</button> 
+      </div>
+        </p-dialog>
+    
+
+
 <router-outlet></router-outlet>

@@ -4,7 +4,6 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SpotsserviceService } from '../../../service/spots/spotsservice.service';
-// import { DatePickerModule } from 'primeng/datepicker';
 import { CalendarModule } from 'primeng/calendar';
 import { FormsModule, FormControl } from '@angular/forms';
 import { ReservationService } from '../../../service/reservation/reservation.service';
@@ -94,37 +93,11 @@ export class LotComponent {
   {
     
     this.fetchspots()
-
-    // this.spots= [
-    //   { id: 1, status: 'available', type: 'regular', price: 10 },
-    //   { id: 2, status: 'occupied', type: 'disabled', price: 15 },
-    //   { id: 3, status: 'available', type: 'ev', price: 20 },
-    //   { id: 4, status: 'occupied', type: 'regular', price: 10 },
-    //   { id: 5, status: 'available', type: 'disabled', price: 15 },
-    //   { id: 6, status: 'occupied', type: 'ev', price: 25 },
-    //   { id: 7, status: 'available', type: 'regular', price: 10 },
-    //   { id: 8, status: 'available', type: 'ev', price: 20 },
-    //   { id: 9, status: 'occupied', type: 'regular', price: 10 },
-    //   { id: 10, status: 'available', type: 'disabled', price: 15 },
-    //   { id: 11, status: 'occupied', type: 'ev', price: 25 },
-    //   { id: 12, status: 'available', type: 'regular', price: 10 },
-    //   { id: 13, status: 'occupied', type: 'disabled', price: 15 },
-    //   { id: 14, status: 'available', type: 'regular', price: 10 },
-    //   { id: 15, status: 'occupied', type: 'disabled', price: 15 },
-    // ]
-
     setTimeout(() => {
       this.disabledSpots = this.extractSpotsByType(this.spots, 'DISABLED');
       this.regularSpots = this.extractSpotsByType(this.spots, 'REGULAR');
       this.evSpots = this.extractSpotsByType(this.spots, 'EV');
       }, 200); 
-
-
-    
-    // console.log(this.disabledSpots)
-    // console.log(this.evSpots)
-    // console.log(this.regularSpots)
-
   }
 
 

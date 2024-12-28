@@ -1,0 +1,36 @@
+<div class="main">
+
+    
+    <!-- <div class="search-container">
+        <p-iconfield>
+            <p-inputicon styleClass="pi pi-search" />
+            <input type="text" pInputText placeholder="Search" />
+        </p-iconfield>
+    </div> -->
+    
+    <div class="lots-container">
+        <!-- <button class="reserve-button">
+            Reserve Spot
+            <i-lucide [img]="arrowIcon" class="arrow-icon"></i-lucide>
+        </button> -->
+        <!-- <input pInputText id="email" formControlName="email"/> -->
+        <div class="scrollable">
+
+            <div class="lot-card" *ngFor="let notification of (notifications && notifications.length > 0 ? notifications : nonotification)">
+                <div class="lot-content">
+                    <!-- <h3 class="lot-name">{{ lot.name }}</h3> -->
+                    <p class="lot-location">
+                        <i-lucide [img]="bellIcon" class="location-icon"></i-lucide>
+                        {{ notification }}
+                    </p>
+                    
+            </div>
+        </div>
+        </div>
+        <div class="paginator-container">
+        <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows" [totalRecords]="notifications?.length||0" [rowsPerPageOptions]="[5, 10]" />
+        </div>
+</div>
+
+</div>
+<router-outlet></router-outlet>

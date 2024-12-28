@@ -17,14 +17,12 @@ export interface NavItem {
   route: string;
 }
 @Component({
-  selector: 'app-manager-navbar',
+  selector: 'app-admin-navbar',
   imports: [ FormsModule, ReactiveFormsModule,FloatLabelModule,ButtonModule,RouterModule,RouterLink,InputTextModule,CommonModule,DropdownModule,CalendarModule,LucideAngularModule],
-  templateUrl: './manager-navbar.component.html',
-  styleUrl: './manager-navbar.component.scss'
+  templateUrl: './admin-navbar.component.html',
+  styleUrl: './admin-navbar.component.scss'
 })
-
-export class ManagerNavbarComponent {
-
+export class AdminNavbarComponent {
   constructor(private router:Router,private activatedRoute : ActivatedRoute){}
 
   readonly FileIcon = File;
@@ -35,9 +33,7 @@ export class ManagerNavbarComponent {
   readonly BarChartIcon = BarChart3
   readonly NotificationIcon = Bell
   navItems: NavItem[] = [
-    { label: 'Reserve', icon: this.CarIcon, route: 'reserve' },
-    { label: 'My Reservations', icon: this.CalendarIcon, route: 'reservations' },
-    { label: 'My Lots', icon: this.BuildingIcon, route: 'lots' },
+    { label: 'Pending Lots', icon: this.BuildingIcon, route: 'pending_lots' },
     { label: 'Reports', icon: this.BarChartIcon, route: 'reports' },
     {label: 'Notifactions',icon:this.NotificationIcon, route:'notifications'}
   ];
@@ -49,9 +45,11 @@ export class ManagerNavbarComponent {
 
 
   navigate(route: string): void {
-    if(route==='lots'|| route === 'reports')
-    this.router.navigate([route], { relativeTo: this.router.routerState.root.firstChild ,state:{managerid:localStorage.getItem("id")}});
+    if(route==='pending_lots'|| route === 'reports')
+    this.router.navigate([route], { relativeTo: this.router.routerState.root.firstChild ,state:{adminid:localStorage.getItem("id")}});
     else
-    this.router.navigate([route], { relativeTo: this.router.routerState.root.firstChild});
+      this.router.navigate([route], { relativeTo: this.router.routerState.root.firstChild});
+
+
   }
 }

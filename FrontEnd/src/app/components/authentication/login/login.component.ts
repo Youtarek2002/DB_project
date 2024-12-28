@@ -45,13 +45,15 @@ export class LoginComponent {
             console.log('here')
             this.router.navigate(['/userdashboard'])
           }
-          else if(decodedToken.role === "ADMIN")
+          else if(decodedToken.role === "SYSTEM_ADMIN")
           {
-            // navigate to admin dashboard 
+            this.router.navigate(['/admindashboard'],{state:{adminid:localStorage.getItem("id")}}) 
           }
-          else if(decodedToken.role === "Manager")
+          else if(decodedToken.role === "PARKING_LOT_MANAGER")
           {
             //navigate to manager dashboard
+            this.router.navigate(['/managerdashboard'])
+
           }
         }
         else
@@ -61,7 +63,7 @@ export class LoginComponent {
 
       },
       error=>{
-        console.log(error.error)
+        console.log(error)
       }
 
     )
