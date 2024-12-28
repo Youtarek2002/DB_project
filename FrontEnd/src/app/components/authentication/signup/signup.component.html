@@ -82,14 +82,14 @@
 
                 <div class="grid-container">
                     
-                    <input class="area" pInputText id="licence" formControlName="licencePlate" placeholder="Licence Number" />
+                    <input class="area" pInputText id="license" formControlName="licensePlate" placeholder="License Number" />
                     <div 
                     style="height: 0.02em;" 
                     *ngIf="  
-                    (signupForm.get('licencePlate')?.dirty || signupForm.get('licencePlate')?.touched)">
+                    (signupForm.get('licensePlate')?.dirty || signupForm.get('licensePlate')?.touched)">
                     <span class="text-danger"
-                    *ngIf="getErrorMessage(signupForm.get('licencePlate'))">
-                    {{getErrorMessage(signupForm.get('licencePlate'))}}
+                    *ngIf="getErrorMessage(signupForm.get('licensePlate'))">
+                    {{getErrorMessage(signupForm.get('licensePlate'))}}
                 </span>
             </div>
             </div>

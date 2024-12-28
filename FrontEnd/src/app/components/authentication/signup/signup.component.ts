@@ -42,7 +42,7 @@ export class SignupComponent {
       phone: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]],
       confirmpassword: ['', [Validators.required]],
-      licencePlate: ['',Validators.required],
+      licensePlate: ['',Validators.required],
       paymentMethod: ['',[Validators.required]]
     },
     { validators: [this.passwordmatch, this.validpassword.bind(this)] });

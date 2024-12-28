@@ -10,8 +10,7 @@
         <!-- Desktop Navigation -->
         <div class="nav-links">
           <button *ngFor="let item of navItems"
-                  [routerLink]="item.route"
-                  routerLinkActive="active"
+                 (click)="navigate(item.route)"
                   class="nav-button">
             <i-lucide [name]="item.icon"></i-lucide>
             <span>{{item.label}}</span>
@@ -19,7 +18,7 @@
         </div>
   
         <!-- Mobile menu button -->
-        
+       
       </div>
     </div>
   

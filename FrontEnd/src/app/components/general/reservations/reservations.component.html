@@ -1,0 +1,47 @@
+<div class="main">
+
+    
+    <!-- <div class="search-container">
+        <p-iconfield>
+            <p-inputicon styleClass="pi pi-search" />
+            <input type="text" pInputText placeholder="Search" />
+        </p-iconfield>
+    </div> -->
+    
+    <div class="lots-container">
+        <!-- <button class="reserve-button">
+            Reserve Spot
+            <i-lucide [img]="arrowIcon" class="arrow-icon"></i-lucide>
+        </button> -->
+        <!-- <input pInputText id="email" formControlName="email"/> -->
+        <div class="scrollable">
+
+            <div class="lot-card" *ngFor="let reservation of toview">
+                <div class="lot-content">
+                    <!-- <h3 class="lot-name">{{ lot.name }}</h3> -->
+                    <p class="lot-location">
+                        <i-lucide [img]="mapPinIcon" class="location-icon"></i-lucide>
+                        {{ reservation.location }}
+                    </p>
+                    <p class="lot-location">
+                        <i-lucide [img]="clockIcon" class="location-icon"></i-lucide>
+                        {{ reservation.reservations[0].startTime }}
+                    </p>
+                    <p class="lot-location">
+                        <i-lucide [img]="clockIcon" class="location-icon"></i-lucide>
+                        {{ reservation.reservations[0].endTime }}
+                    </p>
+                <button (click)="navigate(reservation)" class="reserve-button">
+                    Get Directions
+                    <i-lucide [img]="arrowIcon" class="arrow-icon"></i-lucide>
+                </button>
+            </div>
+        </div>
+        </div>
+        <div class="paginator-container">
+        <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows" [totalRecords]="reservations.length" [rowsPerPageOptions]="[5, 10]" />
+        </div>
+</div>
+
+</div>
+<router-outlet></router-outlet>

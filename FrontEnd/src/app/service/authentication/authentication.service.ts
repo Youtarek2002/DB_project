@@ -16,6 +16,7 @@ export class AuthenticationService {
   signup(info:any):Observable<any>
   {
     delete info.confirmpassword
+    console.log(info)
     return this.http.post(Environment.url+'/authenticate/signup',info)
   }
 }

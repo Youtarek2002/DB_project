@@ -5,19 +5,23 @@
     background-color: blue;
     gap: 10px;
     padding: 10px 20px;
+    height: 100vh; /* Makes sure it takes the full height of the viewport */
+
 }
 
 .lot-container
 {
+  position: relative;
     display: flex;
     margin-top: 10px;
     background-color: rgb(227, 247, 7);
-    height: 929px;
+    // height: 929px;
     // align-items: center;
     padding: 20px 50px;
     border-radius: 10px;
     gap: 20px;
     flex-direction: column;
+    height: 100%;
 }
 .info{
     display: flex;
@@ -103,18 +107,32 @@
   }
 
   .spots-grid {
+    position: relative;
+    height:100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    // grid-auto-rows: 100px; /* Set a fixed height for each row */
+
     gap: 2rem;
     padding: 1rem;
     background-color: black;
     text-align: center;
-    height: 420px;
+    align-content: center;
+    // height: 420px;
     p{
       color: white;
       font-size: 30px;
       
     }
+  }
+
+  .horizontal{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+    font-size: 35px;
   }
   
   .spot-grid {
@@ -153,3 +171,54 @@
       &.disabled { color: #2563eb; }
       &.regular { color: #6b7280; }
     }
+:host{
+
+  ::ng-deep .p-calendar{
+    background-image:none;
+    position: relative;
+    width: 100%;
+    transform: translate(10px,10px);
+    background-color: white;
+  
+  }
+  ::ng-deep .p-calendar input {
+    // background-color: black;
+    border: none;
+    border-bottom:1px solid  ;
+    border-color: black;
+    background-color: white;
+  }
+
+  ::ng-deep .p-inputtext{
+    color:black;
+    background-color: white;
+  }
+}
+.reserve-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  background-color: #2563eb;
+  color: white;
+  border-radius: 0.5rem;
+  border: none;
+  font-weight: 500;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #1d4ed8;
+  }
+
+  .arrow-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-left: 0.5rem;
+  }
+}
+
+.spotstyle
+{
+  border-radius: 50px;
+}

@@ -18,7 +18,7 @@
 
             <div class="lot-card" *ngFor="let lot of toview">
                 <div class="lot-content">
-                    <h3 class="lot-name">{{ lot.name }}</h3>
+                    <!-- <h3 class="lot-name">{{ lot.name }}</h3> -->
                     <p class="lot-location">
                         <i-lucide [img]="mapPinIcon" class="location-icon"></i-lucide>
                         {{ lot.location }}
@@ -26,21 +26,21 @@
                     <div class="spots-grid">
                     <div class="spot-type">
                         <i-lucide [img]="zapIcon" class="spot-icon ev"></i-lucide>
-                        <span class="spot-count">{{ lot.spots.ev }}</span>
+                        <span class="spot-count">{{ lot.EV_count }}</span>
                         <span class="spot-label">EV Spots</span>
                     </div>
                     <div class="spot-type">
                         <i-lucide [img]="wheelChairIcon" class="spot-icon disabled"></i-lucide>
-                        <span class="spot-count">{{ lot.spots.disabled }}</span>
+                        <span class="spot-count">{{ lot.disabled_count }}</span>
                         <span class="spot-label">Disabled Spots</span>
                     </div>
                     <div class="spot-type">
                         <i-lucide [img]="carIcon" class="spot-icon regular"></i-lucide>
-                        <span class="spot-count">{{ lot.spots.regular }}</span>
+                        <span class="spot-count">{{ lot.regular_count }}</span>
                         <span class="spot-label">Regular Spots</span>
                     </div>
                 </div>
-                <button class="reserve-button">
+                <button (click)="routetolot(lot)" class="reserve-button">
                     Reserve Spot
                     <i-lucide [img]="arrowIcon" class="arrow-icon"></i-lucide>
                 </button>
@@ -53,3 +53,4 @@
 </div>
 
 </div>
+<router-outlet></router-outlet>
