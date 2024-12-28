@@ -2,7 +2,7 @@
 {
     display: flex;
     flex-direction: column;
-    background-color: blue;
+    background-color: rgb(112, 117, 144);;
     gap: 10px;
     padding: 10px 20px;
 }
@@ -22,7 +22,7 @@ input
 {
     display: flex;
     margin-top: 10px;
-    background-color: rgb(227, 247, 7);
+    background-color: #dadada;
     height: 929px;
     align-items: center;
     padding: 20px;
@@ -37,7 +37,7 @@ input
     width: 100%;
     display: flex;
     margin-top: 10px;
-    background-color: rgb(227, 247, 7);
+    background-color: #dadada(227, 247, 7);
     height: 850px;
     align-items: center;
     padding: 20px;
@@ -56,7 +56,7 @@ input
 }
 
 .scrollable::-webkit-scrollbar-thumb {
-    background: #007bff;  /* Fancy scrollbar color */
+    background: #007ACC;  /* Fancy scrollbar color */
     border-radius: 4px;  /* Rounded edges for thumb */
     border: 2px solid transparent;  /* Optional: to make the thumb stand out */
 }
@@ -151,7 +151,7 @@ input
     align-items: center;
     justify-content: center;
     padding: 0.75rem;
-    background-color: #2563eb;
+    background-color: #007ACC;
     color: white;
     border-radius: 0.5rem;
     font-weight: 500;

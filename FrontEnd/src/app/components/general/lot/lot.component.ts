@@ -41,6 +41,9 @@ export class LotComponent {
   disabledSpots!:any
   regularSpots!:any
   evSpots!:any
+  dprice:number=0
+  eprice:number=0
+  rprice:number=0
   // startTimeControl = new FormControl();
   // endTimeControl = new FormControl();
   startTime!: string;
@@ -68,6 +71,9 @@ export class LotComponent {
     const navigation = this.router.getCurrentNavigation();
     this.lot = navigation?.extras.state?.['data'] || null;
     if (this.lot) {
+      this.dprice=this.lot.disabled_price
+      this.eprice=this.lot.EV_price
+      this.rprice = this.lot.regular_price
       sessionStorage.setItem('selectedLot', JSON.stringify(this.lot));
       this.center = {
         lat: this.lot.latitude,
@@ -77,6 +83,9 @@ export class LotComponent {
       const storedLot = sessionStorage.getItem('selectedLot');
       if (storedLot) {
         this.lot = JSON.parse(storedLot);
+        this.dprice=this.lot.disabled_price
+      this.eprice=this.lot.EV_price
+      this.rprice = this.lot.regular_price
         this.center = {
           lat: this.lot.latitude,
           lng: this.lot.longitude,
@@ -97,7 +106,8 @@ export class LotComponent {
       this.disabledSpots = this.extractSpotsByType(this.spots, 'DISABLED');
       this.regularSpots = this.extractSpotsByType(this.spots, 'REGULAR');
       this.evSpots = this.extractSpotsByType(this.spots, 'EV');
-      }, 200); 
+      
+           }, 200); 
   }
 
 

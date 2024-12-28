@@ -75,17 +75,17 @@
             </button>
             <div class="spot-typee">
                 <i-lucide [img]="carIcon" class="image regular"></i-lucide>
-                 Regular Spots 
+                 Regular Spots ({{rprice}}LE/hour)
             </div>    
             
             <div class="spot-typee">
                 <i-lucide [img]="zapIcon" class="image ev"></i-lucide>
-                 EV Spots 
+                 EV Spots ({{eprice}}LE/hour)
             </div> 
 
             <div class="spot-typee">
                 <i-lucide [img]="wheelChairIcon" class="image disabled"></i-lucide>
-                 Disabled Spots 
+                 Disabled Spots ({{dprice}}LE/hour)
             </div> 
             
             
@@ -96,21 +96,21 @@
 
             <div class="spot-grid">
                 <div class="spotstyle" (click)="selectspot(spot)" class="text" *ngFor="let spot of regularSpots; let i = index" [ngStyle]="{
-                    'background-color': spot === selectedSpot ? 'darkgreen' : spot.status === 'occupied' ? 'red' : '#1ac926'
+                    'background-color': spot === selectedSpot ? '#0A456D' : spot.status === 'occupied' ? 'red' : '#007ACC'
                   }">
                     <span >{{ spot.id-start+1-lot.disabled_count }}</span>
                 </div>
             </div>
             <div class="spot-grid">
                 <div class="spotstyle" (click)="selectspot(spot)" class="text" *ngFor="let spot of evSpots; let i = index" [ngStyle]="{
-                    'background-color': spot === selectedSpot ? 'darkgreen' : spot.status === 'occupied' ? 'red' : '#1ac926'
+                    'background-color': spot === selectedSpot ? '#0A456D' : spot.status === 'occupied' ? 'red' : '#007ACC'
                   }">
                     <span>{{ spot.id-start+1-lot.disabled_count-lot.regular_count }}</span>
                 </div>
             </div>
             <div class="spot-grid">
                 <div class="spotstyle" (click)="selectspot(spot)" class="text" *ngFor="let spot of disabledSpots let i = index" [ngStyle]="{
-                    'background-color': spot === selectedSpot ? 'darkgreen' : spot.status === 'occupied' ? 'red' : '#1ac926'
+                    'background-color': spot === selectedSpot ? '#0A456D' : spot.status === 'occupied' ? 'red' : '#007ACC'
                 }">
                     <span>{{ spot.id-start+1 }}</span>
                 </div>

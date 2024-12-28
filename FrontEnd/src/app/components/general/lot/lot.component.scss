@@ -2,7 +2,7 @@
 {
     display: flex;
     flex-direction: column;
-    background-color: blue;
+    background-color: rgb(112, 117, 144);
     gap: 10px;
     padding: 10px 20px;
     height: 100vh; /* Makes sure it takes the full height of the viewport */
@@ -14,7 +14,7 @@
   position: relative;
     display: flex;
     margin-top: 10px;
-    background-color: rgb(227, 247, 7);
+    background-color: white;
     // height: 929px;
     // align-items: center;
     padding: 20px 50px;
@@ -31,7 +31,7 @@
         width:25%;
         display: flex;
     margin-top: 10px;
-    background-color: rgb(227, 247, 7);
+    // background-color: rgb(227, 247, 7);
     // height: 929px;
     // align-items: center;
     padding: 20px;
@@ -115,7 +115,11 @@
 
     gap: 2rem;
     padding: 1rem;
-    background-color: black;
+    background-color: #dadada;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.279);
+
+    // border: 1px solid rgb(184, 184, 184);
+    border-radius: 10px;
     text-align: center;
     align-content: center;
     // height: 420px;
@@ -140,7 +144,7 @@
     display: grid;
     grid-template-columns: repeat(5, 1fr); 
     gap: 1rem;
-    background-color: white;
+    // background-color: white;
     grid-auto-rows: 50px; /* Set a fixed height for each row */
     font-size: 25px;
     text-align: center;
@@ -157,14 +161,15 @@
     justify-content: center;
     text-align: center;
     // gap: 10px;
-    font-size: 35px;
-    color: white
+    font-size: 30px;
+    color: black;
+    font-weight: 550;
   }
 
   .image
     {
         width: 1rem;
-      height: 2.5rem;
+      height: 2rem;
       margin-right: 2rem;
       scale: 2;
       &.ev { color: #059669; }
@@ -200,7 +205,7 @@
   align-items: center;
   justify-content: center;
   padding: 0.75rem;
-  background-color: #2563eb;
+  background-color: #007ACC;
   color: white;
   border-radius: 0.5rem;
   border: none;
@@ -221,4 +226,7 @@
 .spotstyle
 {
   border-radius: 50px;
+}
+h4{
+  color: black;
 }
